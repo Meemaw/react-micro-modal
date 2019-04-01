@@ -15,7 +15,7 @@ cache:
 
 script:
   - echo "Running tests against $(node -v) ..."
-  - yarn test
+  - yarn test:coveralls
 
 jobs:
   include:
