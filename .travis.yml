@@ -1,23 +1,22 @@
 language: node_js
 
+node_js:
+  - '8'
+  - '10'
+  - '11'
+
 cache:
   yarn: true
   directories:
     - node_modules
 
-notifications:
-  email: false
-
-node_js:
-  - '10'
-  - '11'
-  - '8'
+script: echo "Running tests against $(node -v) ..."
 
 jobs:
   include:
-    - stage: test
-      script:
-        - yarn test && yarn build
-    - stage: deploy
-      if: branch = master
-      script: yarn travis-deploy-once "yarn semantic-release"
+    - stage: release
+      node_js: lts/*
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: npx semantic-release
