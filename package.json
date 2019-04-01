@@ -1,12 +1,14 @@
 {
   "name": "react-micro-modal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React accessible micro modal component",
   "keywords": [
     "react",
     "micro",
     "modal",
-    "accessible"
+    "component",
+    "accessible",
+    "frontend"
   ],
   "main": "dist/react-micro-modal.umd.js",
   "module": "dist/react-micro-modal.es5.js",
