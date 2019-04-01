@@ -1,6 +1,6 @@
 {
   "name": "react-micro-modal",
-  "version": "0.1.1",
+  "version": "0.0.0-development",
   "description": "React accessible micro modal component",
   "keywords": [
     "react",
@@ -12,7 +12,7 @@
   ],
   "main": "dist/react-micro-modal.umd.js",
   "module": "dist/react-micro-modal.es5.js",
-  "typings": "dist/types/react-micro-modal.d.ts",
+  "typings": "dist/react-micro-modal.d.ts",
   "files": [
     "dist"
   ],
@@ -20,6 +20,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Meemaw/react-micro-modal"
+  },
+  "bugs": {
+    "url": "https://github.com/Meemaw/react-micro-modal/issues"
   },
   "license": "MIT",
   "engines": {
