@@ -5,12 +5,9 @@ node_js:
   - '10'
   - '11'
 
-cache:
-  yarn: true
-  directories:
-    - node_modules
-
-script: echo "Running tests against $(node -v) ..."
+script:
+  - echo "Running tests against $(node -v) ..."
+  - yarn test
 
 jobs:
   include:
