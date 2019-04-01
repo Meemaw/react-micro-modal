@@ -22,6 +22,6 @@
     "forceConsistentCasingInFileNames": true,
     "target": "es5"
   },
-  "include": ["src", "@types", "test"],
+  "include": ["src", "@types"],
   "exclude": ["node_modules", "dist"]
 }

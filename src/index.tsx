@@ -34,8 +34,8 @@ interface Props extends PortalBaseProps, OptionalProps {
   id?: string;
 }
 
-const ESCAPE_KEY_CODE = 27;
-const TAB_KEY_CODE = 9;
+const ESCAPE_KEY = 'Escape';
+const TAB_KEY = 'Tab';
 
 let openContainerRefStack: React.RefObject<HTMLDivElement>[] = [];
 
@@ -173,11 +173,10 @@ class MicroModal extends React.PureComponent<Props, State> {
 
   onKeydown = (event: KeyboardEvent) => {
     if (this.containerRef === getLastOpenContainer()) {
-      if (event.keyCode === ESCAPE_KEY_CODE && this.props.closeOnEscapeClick) {
+      if (event.key === ESCAPE_KEY && this.props.closeOnEscapeClick) {
         this.handleClose();
       }
-
-      if (event.keyCode === TAB_KEY_CODE) {
+      if (event.key === TAB_KEY) {
         this.focusedElement = handleTabPress(this.containerRef, event);
       }
     }
