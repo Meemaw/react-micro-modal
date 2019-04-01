@@ -12,10 +12,11 @@ function getInitialState(props: Props): State {
       '[React-micro-modal]: both trigger and open prop provided. React-micro-modal wont function properly. Please use trigger for uncontrolled component and open for controlled component.'
     );
   }
-  return {
+
+  return Object.freeze({
     open: props.open === undefined ? false : props.open,
     isClosing: false
-  };
+  });
 }
 
 type OptionalProps = {
@@ -34,8 +35,8 @@ interface Props extends PortalBaseProps, OptionalProps {
   id?: string;
 }
 
-const ESCAPE_KEY = 'Escape';
-const TAB_KEY = 'Tab';
+const ESCAPE_KEY: 'Escape' = 'Escape';
+const TAB_KEY: 'Tab' = 'Tab';
 
 let openContainerRefStack: React.RefObject<HTMLDivElement>[] = [];
 
@@ -84,7 +85,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   }
 
-  closeOnAnimationEnd = (handleClose: () => void) => {
+  private closeOnAnimationEnd = (handleClose: () => void): void => {
     const containerElement = this.containerRef.current!;
 
     containerElement.addEventListener('animationend', function handler() {
@@ -93,30 +94,30 @@ class MicroModal extends React.PureComponent<Props, State> {
     });
   };
 
-  handleOpen = () => {
+  private handleOpen = (): void => {
     openContainerRefStack.push(this.containerRef);
     this.setState({ open: true }, this.onAfterOpen);
   };
 
-  onAfterOpen = () => {
+  private onAfterOpen = (): void => {
     this.addEventListeners();
     this.focusFirstNode();
   };
 
-  addEventListeners = () => {
+  private addEventListeners = (): void => {
     document.addEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
       this.modalRef.current!.addEventListener('click', this.onClick);
     }
   };
 
-  startClosingUncontrolled = () => {
+  private startClosingUncontrolled = (): void => {
     this.setState({ isClosing: true }, () => {
       this.closeOnAnimationEnd(this._handleCloseAnimationEnd);
     });
   };
 
-  handleClose = () => {
+  handleClose = (): void => {
     if (this.isControlled) {
       if (this.props.handleClose) {
         this.props.handleClose();
@@ -132,11 +133,11 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  _handleCloseAnimationEnd = () => {
+  private _handleCloseAnimationEnd = (): void => {
     this.setState({ open: false, isClosing: false }, this.onAfterClose);
   };
 
-  onAfterClose = () => {
+  private onAfterClose = (): void => {
     openContainerRefStack.pop();
     if (openContainerRefStack.length > 0) {
       focusFirstNode(getLastOpenContainer());
@@ -145,7 +146,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     this.focusedElement = undefined;
   };
 
-  focusFirstNode() {
+  private focusFirstNode(): void {
     if (this.props.disableFocus) {
       return;
     }
@@ -153,14 +154,14 @@ class MicroModal extends React.PureComponent<Props, State> {
     this.focusedElement = focusFirstNode(this.containerRef);
   }
 
-  removeEventListeners = () => {
+  private removeEventListeners = (): void => {
     document.removeEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
       this.modalRef.current!.removeEventListener('click', this.onClick);
     }
   };
 
-  onClick = (event: MouseEvent) => {
+  private onClick = (event: MouseEvent): void => {
     if (
       event.target &&
       this.containerRef.current &&
@@ -171,7 +172,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  onKeydown = (event: KeyboardEvent) => {
+  private onKeydown = (event: KeyboardEvent): void => {
     if (this.containerRef === getLastOpenContainer()) {
       if (event.key === ESCAPE_KEY && this.props.closeOnEscapeClick) {
         this.handleClose();
@@ -182,17 +183,17 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  getOverlayZIndex(): number {
+  private getOverlayZIndex(): number {
     return openContainerRefStack.findIndex(r => r === this.containerRef);
   }
 
-  renderContent = (
+  private renderContent = (
     open: boolean,
     isClosing: boolean,
     renderChildren: (handleClose: () => void) => React.ReactNode,
     overlayStyle: React.CSSProperties,
     parentSelector: (() => HTMLElement) | undefined
-  ) => {
+  ): React.ReactNode => {
     const ariaHidden = open && !isClosing ? 'false' : 'true';
     const className = open ? 'modal modal-slide is-open' : 'modal modal-slide';
     const { zIndex, ...restOverlayStyle } = overlayStyle;
