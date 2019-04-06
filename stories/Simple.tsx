@@ -42,6 +42,7 @@ storiesOf('Micro modal', module)
           trigger={handleOpen => (
             <div>
               <div onClick={handleOpen}>Open nested modal!</div>
+              <a href="www.google.com">href</a>
               <button onClick={handleClose}>Close modal</button>
             </div>
           )}
@@ -52,7 +53,8 @@ storiesOf('Micro modal', module)
               trigger={handleOpen => (
                 <div>
                   <div onClick={handleOpen}>Open nested modal 2</div>
-                  <div onClick={handleClose}>Close nested modal</div>
+                  <a href="www.google.com">nested href</a>
+                  <button onClick={handleClose}>Close nested modal</button>
                 </div>
               )}
             >
@@ -92,7 +94,7 @@ const ControlledModalExample = () => {
   return (
     <div>
       <input placeholder="TODO" />
-      <div onClick={() => setOpen(true)}>Open modal</div>
+      <button onClick={_ => setOpen(true)}>Open modal</button>
       <MicroModal
         open={open}
         handleClose={() => setOpen(false)}
