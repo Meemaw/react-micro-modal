@@ -1,14 +1,20 @@
 import { RefObject } from 'react';
 
-export const getFocusableNodes = (ref: RefObject<HTMLDivElement>): HTMLElement[] => {
+export const getFocusableNodes = (
+  ref: RefObject<HTMLDivElement>
+): HTMLElement[] => {
   return !ref.current
     ? []
-    : Object.values(ref.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELETORS));
+    : Object.values(
+        ref.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELETORS)
+      );
 };
 
-export const focusFirstNode = (ref: RefObject<HTMLDivElement>): HTMLElement | undefined => {
+export const focusFirstNode = (
+  ref: RefObject<HTMLDivElement>
+): HTMLElement | undefined => {
   const focusableNodes = getFocusableNodes(ref);
-  let focusedElement;
+  let focusedElement: HTMLElement | undefined;
   if (focusableNodes.length) {
     focusedElement = focusableNodes[0];
     focusedElement.focus();
@@ -31,7 +37,9 @@ export const handleTabPress = (
     focusedElement.focus();
     event.preventDefault();
   } else {
-    const focusedItemIndex = focusableNodes.indexOf(document.activeElement as HTMLElement);
+    const focusedItemIndex = focusableNodes.indexOf(
+      document.activeElement as HTMLElement
+    );
     if (event.shiftKey && focusedItemIndex === 0) {
       focusableNodes[focusableNodes.length - 1].focus();
       event.preventDefault();
@@ -40,6 +48,7 @@ export const handleTabPress = (
       focusedElement.focus();
       event.preventDefault();
     }
+    return focusableNodes[focusedItemIndex];
   }
   return focusedElement;
 };

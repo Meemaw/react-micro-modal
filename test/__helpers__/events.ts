@@ -1,14 +1,21 @@
 import { fireEvent } from 'react-testing-library';
 
-/*
-function fireTabKey(element: Element = document.body) {
+export function fireShiftTabKey(element: Element = document.body) {
+  fireTabKey(element, true);
+}
+
+export function fireTabKey(element: Element = document.body, shiftKey = false) {
   fireKeyDownEvent(element, {
     key: 'Tab',
+    code: 'Tab',
     keyCode: 9,
-    which: 9
+    which: 9,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    shiftKey
   });
 }
-*/
 
 export function fireDocumentClick(element: Element = document.body) {
   fireEvent.click(element);

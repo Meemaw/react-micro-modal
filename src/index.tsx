@@ -4,20 +4,12 @@ import { focusFirstNode, handleTabPress } from './focus';
 import ModalPortal, { PortalBaseProps } from './Portal';
 import { CONTAINER_BASE_STYLE, OVERLAY_BASE_STYLE } from './styles';
 
-type State = { open: boolean; isClosing: boolean };
+const initialState = Object.freeze({
+  open: false,
+  isClosing: false
+});
 
-function getInitialState(props: Props): State {
-  if (props.trigger !== undefined && props.open !== undefined) {
-    console.warn(
-      '[React-micro-modal]: both trigger and open prop provided. React-micro-modal wont function properly. Please use trigger for uncontrolled component and open for controlled component.'
-    );
-  }
-
-  return Object.freeze({
-    open: props.open === undefined ? false : props.open,
-    isClosing: false
-  });
-}
+type State = typeof initialState;
 
 type OptionalProps = {
   closeOnEscapeClick?: boolean;
@@ -45,7 +37,7 @@ function getLastOpenContainer(): React.RefObject<HTMLDivElement> {
 }
 
 class MicroModal extends React.PureComponent<Props, State> {
-  readonly state: State = getInitialState(this.props);
+  readonly state: State = initialState;
 
   static defaultProps: OptionalProps = {
     disableFocus: false,
