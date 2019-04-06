@@ -31,7 +31,7 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts{,x}' 'test/**/*.ts{,x}'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && cp src/index.css dist && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage --verbose",
     "test:coveralls": "yarn test && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
