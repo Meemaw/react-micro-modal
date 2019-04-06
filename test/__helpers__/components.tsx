@@ -14,7 +14,7 @@ type TestProps = {
   closeOnAnimationEnd?: boolean;
 };
 
-const UncontrolledModal = ({
+const UncontrolledTestModal = ({
   closeOnEscapeClick = true,
   closeOnOverlayClick = true,
   modalClassName = '',
@@ -32,7 +32,7 @@ const UncontrolledModal = ({
         <button onClick={handleOpen}>{openModalTriggerText}</button>
       )}
     >
-      {handleClose => <ModalContent handleClose={handleClose} />}
+      {handleClose => <TestModalContent handleClose={handleClose} />}
     </Modal>
   );
 };
@@ -41,7 +41,7 @@ interface ControlledTestProps extends TestProps {
   initiallyOpen?: boolean;
 }
 
-const ControlledModal = ({
+const ControlledTestModal = ({
   initiallyOpen = false,
   closeOnEscapeClick = true,
   closeOnOverlayClick = true,
@@ -62,13 +62,13 @@ const ControlledModal = ({
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {handleClose => <ModalContent handleClose={handleClose} />}
+        {handleClose => <TestModalContent handleClose={handleClose} />}
       </Modal>
     </div>
   );
 };
 
-const ModalContent = ({ handleClose }: { handleClose: () => void }) => (
+const TestModalContent = ({ handleClose }: { handleClose: () => void }) => (
   <div>
     <p>Modal content</p>
     <a href="www.google.com" target="_blank">
@@ -79,4 +79,4 @@ const ModalContent = ({ handleClose }: { handleClose: () => void }) => (
   </div>
 );
 
-export { ControlledModal, UncontrolledModal };
+export { ControlledTestModal, UncontrolledTestModal };

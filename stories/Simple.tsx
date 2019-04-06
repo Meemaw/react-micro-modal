@@ -1,9 +1,26 @@
 import { storiesOf } from '@storybook/react';
-import React, { useState } from 'react';
+import React, { useState, CSSProperties } from 'react';
 
 import MicroModal from '../src/index';
 
+const customContainerStyle: CSSProperties = {
+  padding: '30px',
+  maxWidth: '500px',
+  maxHeight: '100vh',
+  borderRadius: '4px',
+  overflowY: 'auto',
+  boxSizing: 'border-box'
+};
+
 storiesOf('Micro modal', module)
+  .add('Simple modal - minimal', () => (
+    <MicroModal
+      containerStyle={{ padding: '30px' }}
+      trigger={handleOpen => <div onClick={handleOpen}>Click me!</div>}
+    >
+      {handleClose => <button onClick={handleClose}>Close modal</button>}
+    </MicroModal>
+  ))
   .add('Simple modal - controlled', () => (
     <div>
       <ControlledModalExample />
@@ -11,6 +28,7 @@ storiesOf('Micro modal', module)
   ))
   .add('Simple modal - uncontrolled', () => (
     <MicroModal
+      containerStyle={customContainerStyle}
       closeOnAnimationEnd={true}
       trigger={handleOpen => (
         <div>
@@ -29,6 +47,7 @@ storiesOf('Micro modal', module)
   ))
   .add('Nested modal', () => (
     <MicroModal
+      containerStyle={customContainerStyle}
       closeOnAnimationEnd={true}
       trigger={handleOpen => (
         <div id="modal-parent" onClick={handleOpen}>
@@ -38,6 +57,7 @@ storiesOf('Micro modal', module)
     >
       {handleClose => (
         <MicroModal
+          containerStyle={customContainerStyle}
           closeOnAnimationEnd={true}
           trigger={handleOpen => (
             <div>
@@ -49,6 +69,7 @@ storiesOf('Micro modal', module)
         >
           {handleClose => (
             <MicroModal
+              containerStyle={customContainerStyle}
               closeOnAnimationEnd={true}
               trigger={handleOpen => (
                 <div>
@@ -96,6 +117,7 @@ const ControlledModalExample = () => {
       <input placeholder="TODO" />
       <button onClick={_ => setOpen(true)}>Open modal</button>
       <MicroModal
+        containerStyle={customContainerStyle}
         open={open}
         handleClose={() => setOpen(false)}
         closeOnAnimationEnd={true}

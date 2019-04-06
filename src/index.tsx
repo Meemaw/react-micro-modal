@@ -15,6 +15,7 @@ type OptionalProps = {
   closeOnEscapeClick?: boolean;
   closeOnOverlayClick?: boolean;
   modalOverlayStyle?: React.CSSProperties;
+  containerStyle?: React.CSSProperties;
   disableFocus?: boolean;
   closeOnAnimationEnd?: boolean;
   modalClassName?: string;
@@ -44,6 +45,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   static defaultProps: OptionalProps = {
     disableFocus: false,
     modalOverlayStyle: {},
+    containerStyle: {},
     closeOnEscapeClick: true,
     closeOnOverlayClick: true,
     closeOnAnimationEnd: false,
@@ -229,7 +231,7 @@ class MicroModal extends React.PureComponent<Props, State> {
           >
             <div
               className="modal-container"
-              style={CONTAINER_BASE_STYLE}
+              style={{ ...CONTAINER_BASE_STYLE, ...this.props.containerStyle }}
               role="dialog"
               aria-modal="true"
               ref={this.containerRef}
