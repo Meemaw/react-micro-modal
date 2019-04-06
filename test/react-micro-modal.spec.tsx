@@ -9,10 +9,10 @@ import {
 import Modal from '../src/react-micro-modal';
 import {
   closeModalElementText,
-  ControlledModal,
+  ControlledTestModal,
   firstFocusableElementText,
   openModalTriggerText,
-  UncontrolledModal
+  UncontrolledTestModal
 } from './__helpers__/components';
 import {
   fireDocumentClick,
@@ -22,8 +22,8 @@ import {
 } from './__helpers__/events';
 
 const MODAL_FIXTURES = [
-  { description: 'Uncontrolled modal', ModalComponent: UncontrolledModal },
-  { description: 'Controlled modal', ModalComponent: ControlledModal }
+  { description: 'Uncontrolled modal', ModalComponent: UncontrolledTestModal },
+  { description: 'Controlled modal', ModalComponent: ControlledTestModal }
 ];
 
 describe('Micro modal', () => {
@@ -142,7 +142,9 @@ describe('Micro modal', () => {
 
   describe('Controlled modal', () => {
     it('Should be initially open on open prop passed', () => {
-      const { getByTestId } = render(<ControlledModal initiallyOpen={true} />);
+      const { getByTestId } = render(
+        <ControlledTestModal initiallyOpen={true} />
+      );
       const modalWrapper = getByTestId('micro-modal');
       expectModalIsOpen(modalWrapper);
     });

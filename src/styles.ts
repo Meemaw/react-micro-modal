@@ -13,11 +13,5 @@ export const OVERLAY_BASE_STYLE: CSSProperties = {
 };
 
 export const CONTAINER_BASE_STYLE: CSSProperties = {
-  backgroundColor: '#fff',
-  padding: '30px',
-  maxWidth: '500px',
-  maxHeight: '100vh',
-  borderRadius: '4px',
-  overflowY: 'auto',
-  boxSizing: 'border-box'
+  backgroundColor: '#fff'
 };

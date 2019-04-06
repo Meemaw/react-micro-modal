@@ -12,3 +12,17 @@ _Accessible, lightweight and configurable modal component with a11y-enabled._
 - Yarn: `yarn add react-micro-modal`
 
 ---
+
+## Example
+
+Here is a minimal uncontrolled modal example in 3 lines of code.
+
+```javascript
+import ReactMicroModal from 'react-micro-modal';
+
+<ReactMicroModal
+  trigger={handleOpen => <div onClick={handleOpen}>Click me!</div>}
+>
+  {handleClose => <button onClick={handleClose}>Close modal</button>}
+</ReactMicroModal>;
+```
