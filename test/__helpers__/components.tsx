@@ -9,14 +9,20 @@ export const firstFocusableElementText = 'Anchor element';
 type TestProps = {
   closeOnEscapeClick?: boolean;
   closeOnOverlayClick?: boolean;
+  modalClassName?: string;
+  modalOverlayClassName?: string;
 };
 
 const UncontrolledModal = ({
   closeOnEscapeClick = true,
-  closeOnOverlayClick = true
+  closeOnOverlayClick = true,
+  modalClassName = '',
+  modalOverlayClassName = ''
 }: TestProps) => {
   return (
     <Modal
+      modalOverlayClassName={modalOverlayClassName}
+      modalClassName={modalClassName}
       closeOnEscapeClick={closeOnEscapeClick}
       closeOnOverlayClick={closeOnOverlayClick}
       trigger={handleOpen => (
@@ -35,13 +41,17 @@ interface ControlledTestProps extends TestProps {
 const ControlledModal = ({
   initiallyOpen = false,
   closeOnEscapeClick = true,
-  closeOnOverlayClick = true
+  closeOnOverlayClick = true,
+  modalClassName = '',
+  modalOverlayClassName = ''
 }: ControlledTestProps) => {
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <div>
       <button onClick={() => setOpen(true)}>{openModalTriggerText}</button>
       <Modal
+        modalClassName={modalClassName}
+        modalOverlayClassName={modalOverlayClassName}
         closeOnEscapeClick={closeOnEscapeClick}
         closeOnOverlayClick={closeOnOverlayClick}
         open={open}
