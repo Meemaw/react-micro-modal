@@ -20,15 +20,13 @@ Here is a minimal uncontrolled modal example in 3 lines of code.
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactMicroModal from 'react-micro-modal';
+import MicroModal from 'react-micro-modal';
 
 const App = () => {
   return (
-    <ReactMicroModal
-      trigger={handleOpen => <div onClick={handleOpen}>Click me!</div>}
-    >
-      {handleClose => <button onClick={handleClose}>Close modal</button>}
-    </ReactMicroModal>
+    <MicroModal trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}>
+      {handleClose => <button onClick={handleClose}>Close!</button>}
+    </MicroModal>
   );
 };
 
