@@ -11,17 +11,20 @@ type TestProps = {
   closeOnOverlayClick?: boolean;
   modalClassName?: string;
   modalOverlayClassName?: string;
+  closeOnAnimationEnd?: boolean;
 };
 
 const UncontrolledModal = ({
   closeOnEscapeClick = true,
   closeOnOverlayClick = true,
   modalClassName = '',
-  modalOverlayClassName = ''
+  modalOverlayClassName = '',
+  closeOnAnimationEnd = false
 }: TestProps) => {
   return (
     <Modal
       modalOverlayClassName={modalOverlayClassName}
+      closeOnAnimationEnd={closeOnAnimationEnd}
       modalClassName={modalClassName}
       closeOnEscapeClick={closeOnEscapeClick}
       closeOnOverlayClick={closeOnOverlayClick}
@@ -43,13 +46,15 @@ const ControlledModal = ({
   closeOnEscapeClick = true,
   closeOnOverlayClick = true,
   modalClassName = '',
-  modalOverlayClassName = ''
+  modalOverlayClassName = '',
+  closeOnAnimationEnd = false
 }: ControlledTestProps) => {
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <div>
       <button onClick={() => setOpen(true)}>{openModalTriggerText}</button>
       <Modal
+        closeOnAnimationEnd={closeOnAnimationEnd}
         modalClassName={modalClassName}
         modalOverlayClassName={modalOverlayClassName}
         closeOnEscapeClick={closeOnEscapeClick}
@@ -57,7 +62,7 @@ const ControlledModal = ({
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {_ => <ModalContent handleClose={() => setOpen(false)} />}
+        {handleClose => <ModalContent handleClose={handleClose} />}
       </Modal>
     </div>
   );
