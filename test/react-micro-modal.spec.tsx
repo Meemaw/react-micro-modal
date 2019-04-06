@@ -115,6 +115,17 @@ describe('Micro modal', () => {
           render(<ModalComponent />)
         );
       });
+
+      it('Should be able to apply custom className to modal', () => {
+        shouldBeAbleToApplyCustomClassName(
+          render(
+            <ModalComponent
+              modalClassName="custom-class"
+              modalOverlayClassName=" my-custom-animation-class and-random-more "
+            />
+          )
+        );
+      });
     });
   });
 
@@ -126,6 +137,16 @@ describe('Micro modal', () => {
     });
   });
 });
+
+function shouldBeAbleToApplyCustomClassName(renderResult: RenderResult) {
+  const { getByTestId } = renderResult;
+  let modalWrapper = getByTestId('micro-modal');
+  expect(modalWrapper.className).toBe('modal modal-slide custom-class');
+  const child = modalWrapper.firstElementChild as HTMLDivElement;
+  expect(child.className).toBe(
+    'modal-overlay my-custom-animation-class and-random-more'
+  );
+}
 
 function modalShouldApplyCorrectClassNamesOnOpenToggle(
   renderResult: RenderResult

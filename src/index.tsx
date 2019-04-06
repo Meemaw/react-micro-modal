@@ -17,6 +17,8 @@ type OptionalProps = {
   modalOverlayStyle?: React.CSSProperties;
   disableFocus?: boolean;
   closeOnAnimationEnd?: boolean;
+  modalClassName?: string;
+  modalOverlayClassName?: string;
 };
 
 interface Props extends PortalBaseProps, OptionalProps {
@@ -44,7 +46,9 @@ class MicroModal extends React.PureComponent<Props, State> {
     modalOverlayStyle: {},
     closeOnEscapeClick: true,
     closeOnOverlayClick: true,
-    closeOnAnimationEnd: false
+    closeOnAnimationEnd: false,
+    modalOverlayClassName: '',
+    modalClassName: ''
   };
 
   isControlled = this.props.open !== undefined;
@@ -187,13 +191,28 @@ class MicroModal extends React.PureComponent<Props, State> {
     parentSelector: (() => HTMLElement) | undefined
   ): React.ReactNode => {
     const ariaHidden = open && !isClosing ? 'false' : 'true';
-    const className = open ? 'modal modal-slide is-open' : 'modal modal-slide';
+    const baseModalClassName = open
+      ? `modal modal-slide is-open`
+      : `modal modal-slide`;
+
+    const customModalClassName = this.props.modalClassName!.trim();
+
+    const modalClassName = customModalClassName
+      ? `${baseModalClassName} ${customModalClassName}`
+      : baseModalClassName;
+
+    const customModalOverlayClassName = this.props.modalOverlayClassName!.trim();
+
+    const baseModalOverlayClassName = this.props.modalOverlayClassName
+      ? `modal-overlay ${customModalOverlayClassName}`
+      : 'modal-overlay';
+
     const { zIndex, ...restOverlayStyle } = overlayStyle;
 
     return (
       <ModalPortal parentSelector={parentSelector}>
         <div
-          className={className}
+          className={modalClassName}
           aria-hidden={ariaHidden}
           ref={this.modalRef}
           id={this.props.id}
@@ -201,7 +220,7 @@ class MicroModal extends React.PureComponent<Props, State> {
           style={{ display: open ? 'block' : 'none' }}
         >
           <div
-            className="modal-overlay"
+            className={baseModalOverlayClassName}
             style={{
               ...OVERLAY_BASE_STYLE,
               zIndex: zIndex || this.getOverlayZIndex(),
