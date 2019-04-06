@@ -1,5 +1,10 @@
 import React from 'react';
-import { Matcher, render, RenderResult } from 'react-testing-library';
+import {
+  fireEvent,
+  Matcher,
+  render,
+  RenderResult
+} from 'react-testing-library';
 
 import Modal from '../src/react-micro-modal';
 import {
@@ -116,6 +121,12 @@ describe('Micro modal', () => {
         );
       });
 
+      it('Open modal should close after closing animation ends', () => {
+        shouldCloseAfterClosingAnimationEnds(
+          render(<ModalComponent closeOnAnimationEnd={true} />)
+        );
+      });
+
       it('Should be able to apply custom className to modal', () => {
         shouldBeAbleToApplyCustomClassName(
           render(
@@ -137,6 +148,19 @@ describe('Micro modal', () => {
     });
   });
 });
+
+function shouldCloseAfterClosingAnimationEnds(renderResult: RenderResult) {
+  const { getByTestId, getByText } = renderResult;
+  let modalWrapper = getByTestId('micro-modal');
+  openModal(getByText);
+  expectModalIsOpen(modalWrapper);
+  closeModal(getByText);
+
+  expect(modalWrapper.className).toBe('modal modal-slide is-open');
+
+  fireEvent.animationEnd(getByTestId('micro-modal__container'));
+  expectModalIsClosed(modalWrapper);
+}
 
 function shouldBeAbleToApplyCustomClassName(renderResult: RenderResult) {
   const { getByTestId } = renderResult;

@@ -233,6 +233,7 @@ class MicroModal extends React.PureComponent<Props, State> {
               role="dialog"
               aria-modal="true"
               ref={this.containerRef}
+              data-testid="micro-modal__container"
             >
               {open ? renderChildren(this.handleClose) : null}
             </div>
