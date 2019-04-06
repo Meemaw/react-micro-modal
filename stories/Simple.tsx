@@ -100,9 +100,9 @@ const ControlledModalExample = () => {
         handleClose={() => setOpen(false)}
         closeOnAnimationEnd={true}
       >
-        {_ => (
+        {handleClose => (
           <ModalContent
-            handleClose={() => setOpen(false)}
+            handleClose={handleClose}
             buttonText="Close controlled modal"
           />
         )}

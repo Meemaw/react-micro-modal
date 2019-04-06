@@ -62,7 +62,7 @@ const ControlledModal = ({
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {_ => <ModalContent handleClose={() => setOpen(false)} />}
+        {handleClose => <ModalContent handleClose={handleClose} />}
       </Modal>
     </div>
   );
