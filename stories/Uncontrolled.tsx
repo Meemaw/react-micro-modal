@@ -5,6 +5,7 @@ import { StoryUncontrolledModal } from './components';
 
 storiesOf('react-micro-modal', module)
   .add('Default', () => <StoryUncontrolledModal />)
+  .add('Initially open', () => <StoryUncontrolledModal initiallyOpen={true} />)
   .add('Modal closing animation', () => (
     <StoryUncontrolledModal closeOnAnimationEnd={true} />
   ))
@@ -17,6 +18,7 @@ storiesOf('react-micro-modal', module)
   .add('Disable focusing first element on afterOpen', () => (
     <StoryUncontrolledModal disableFocus={true} />
   ))
+
   .add('Custom className', () => (
     <StoryUncontrolledModal
       modalOverlayClassName="background--red"

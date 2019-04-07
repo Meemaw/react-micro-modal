@@ -67,6 +67,7 @@ type StoryModalProps = {
   closeOnAnimationEnd?: boolean;
   modalClassName?: string;
   modalOverlayClassName?: string;
+  initiallyOpen?: boolean;
 };
 
 const StoryUncontrolledModal = (props: StoryModalProps) => (

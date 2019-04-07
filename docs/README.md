@@ -32,6 +32,10 @@ import MicroModal from 'react-micro-modal';
   */
   trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}
   /*
+    Boolean describing if the modal should be open on first render. (if used as a uncontrolled component, else just use open)
+  */
+  initiallyOpen={false}
+  /*
     Function that recieves a handleClose function and should render the modal content.
   */
   children={handleClose => <button onClick={handleClose}>Close!</button>}
