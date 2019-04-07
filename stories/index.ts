@@ -1,3 +1,3 @@
 import '../src/index.css';
-
-import './Simple';
+import './index.css';
+import './Uncontrolled';

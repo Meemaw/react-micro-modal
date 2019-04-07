@@ -1,0 +1,86 @@
+code {
+  color: #8a2be2;
+  padding: 0.2rem 0.4rem;
+  font-size: 90% !important;
+  background-color: #f7f7f9;
+  border-radius: 0.25rem;
+  font-family: Source Code Pro, Consolas, monaco, monospace !important;
+}
+
+.modal--header,
+.modal--footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.heading {
+  margin: 0px;
+}
+
+.background--red {
+  background: red !important;
+}
+
+.story--modal > div > div {
+  max-width: 200px !important;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-slide-in {
+  from {
+    transform: translateY(55%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-55%);
+  }
+}
+
+@keyframes modal-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.modal-slide[aria-hidden='false'] .modal-overlay.custom-animation {
+  animation: modal-fade-in 3s cubic-bezier(0, 0, 0.5, 1);
+}
+
+.modal-slide[aria-hidden='true'] .modal-overlay.custom-animation {
+  animation: modal-fade-out 3s cubic-bezier(0, 0, 0.5, 1);
+}
+
+.modal-slide[aria-hidden='false']
+  .modal-overlay.custom-animation
+  > .modal-container {
+  animation: modal-slide-in 3s cubic-bezier(0, 0, 0.5, 1);
+}
+
+.modal-slide[aria-hidden='true']
+  .modal-overlay.custom-animation
+  > .modal-container {
+  animation: modal-slide-out 3s cubic-bezier(0, 0, 0.5, 1);
+}
