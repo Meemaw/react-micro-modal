@@ -4,7 +4,7 @@
 
 _Accessible, lightweight and configurable modal component with a11y-enabled inspired by [Micromodal.js](https://github.com/Ghosh/micromodal)._
 
-### [Release notes](https://github.com/Meemaw/react-micro-modal/releases)
+### [Release notes](https://github.com/Meemaw/react-micro-modal/releases) | [Documentation](https://github.com/Meemaw/react-micro-modal/tree/master/docs)
 
 ---
 
