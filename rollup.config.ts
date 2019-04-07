@@ -47,8 +47,7 @@ export default {
     resolve(),
 
     // Resolve source maps to the original source
-    sourceMaps()
-    /*
+    sourceMaps(),
     terser({
       sourcemap: true,
       output: { comments: false },
@@ -61,6 +60,5 @@ export default {
       // @see https://github.com/terser-js/terser
       toplevel: true
     })
-    */
   ]
 };
