@@ -13,6 +13,18 @@ _Accessible, lightweight and configurable modal component with a11y-enabled insp
 
 ---
 
+## Features
+
+- Micro bundle - 2.38 KB 📦 
+- a11y friendly 👓
+- Supports nested modals
+- Focuses on the first focusable element within the modal
+- Traps focus inside the modal
+- Closes on document click
+- Closes on `Escape` keypress
+- Usage as controlled or uncontrolled component
+
+
 ## Example
 
 Here is a minimal uncontrolled modal example in 3 lines of code.
