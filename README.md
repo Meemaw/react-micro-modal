@@ -24,9 +24,10 @@ import MicroModal from 'react-micro-modal';
 
 const App = () => {
   return (
-    <MicroModal trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}>
-      {handleClose => <button onClick={handleClose}>Close!</button>}
-    </MicroModal>
+    <MicroModal
+      trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}
+      children={handleClose => <button onClick={handleClose}>Close!</button>}
+    />
   );
 };
 
