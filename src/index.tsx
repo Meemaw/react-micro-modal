@@ -77,7 +77,6 @@ class MicroModal extends React.PureComponent<Props, State> {
           this._handleCloseAnimationEnd();
         }
       } else {
-        openContainerRefStack.push(this.containerRef);
         this.onAfterOpen();
       }
     }
@@ -93,11 +92,11 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   private handleOpen = (): void => {
-    openContainerRefStack.push(this.containerRef);
     this.setState({ open: true }, this.onAfterOpen);
   };
 
   private onAfterOpen = (): void => {
+    openContainerRefStack.push(this.containerRef);
     this.addEventListeners();
     this.focusFirstNode();
   };
