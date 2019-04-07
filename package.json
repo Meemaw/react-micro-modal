@@ -31,17 +31,18 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts{,x}' 'test/**/*.ts{,x}'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && cp src/index.css dist && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && cp src/index.css dist",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage --verbose",
     "test:coveralls": "yarn test && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
     "test:watch": "jest --coverage --watch",
     "test:prod": "yarn lint && yarn test -- --no-cache",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook:build": "build-storybook -c .storybook -o .out",
+    "storybook:deploy": "storybook-to-ghpages --existing-output-dir=.out"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -97,6 +98,7 @@
     "@commitlint/cli": "^7.1.2",
     "@commitlint/config-conventional": "^7.1.2",
     "@storybook/react": "^5.0.6",
+    "@storybook/storybook-deployer": "^2.8.1",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.0",
     "@types/react": "^16.8.12",
@@ -136,11 +138,11 @@
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.14.2",
     "typescript": "^3.3.4000"
   },
   "peerDependencies": {
-    "react": "16"
+    "react": "16",
+    "react-dom": "16"
   },
   "husky": {
     "hooks": {

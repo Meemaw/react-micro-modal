@@ -5,8 +5,8 @@ module.exports = ({ baseConfig, env, config }) => {
     test: /\.(ts|tsx)$/,
     loader: require.resolve('babel-loader'),
     options: {
-      presets: [require.resolve('babel-preset-react-app')],
-    },
+      presets: [require.resolve('babel-preset-react-app')]
+    }
   });
 
   config.resolve.extensions.push('.ts', '.tsx');
@@ -15,7 +15,7 @@ module.exports = ({ baseConfig, env, config }) => {
     new ForkTsCheckerWebpackPlugin({
       async: false,
       checkSyntacticErrors: true,
-      formatter: require('react-dev-utils/typescriptFormatter'),
+      formatter: require('react-dev-utils/typescriptFormatter')
     })
   );
 
