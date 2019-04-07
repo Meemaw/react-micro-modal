@@ -191,8 +191,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     overlayStyle: React.CSSProperties,
     parentSelector: (() => HTMLElement) | undefined
   ): React.ReactNode => {
-    const isCompletelyClosed = !open && !isClosing;
-    const ariaHidden = isCompletelyClosed ? 'true' : 'false';
+    const ariaHidden = open && !isClosing ? 'false' : 'true';
     const baseModalClassName = open
       ? `modal modal-slide is-open`
       : `modal modal-slide`;

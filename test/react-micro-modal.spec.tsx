@@ -157,7 +157,8 @@ function shouldCloseAfterClosingAnimationEnds(renderResult: RenderResult) {
   openModal(getByText);
   expectModalIsOpen(modalWrapper);
   closeModal(getByText);
-  expectModalIsOpen(modalWrapper);
+  expect(modalWrapper.className).toBe('modal modal-slide is-open');
+  expect(modalWrapper.getAttribute('aria-hidden')).toBe('true');
   fireEvent.animationEnd(getByTestId('micro-modal__container'));
   expectModalIsClosed(modalWrapper);
 }
