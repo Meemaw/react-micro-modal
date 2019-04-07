@@ -4,6 +4,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps';
 import camelCase from 'lodash.camelcase';
 import typescript from 'rollup-plugin-typescript2';
 import json from 'rollup-plugin-json';
+import { terser } from 'rollup-plugin-terser';
 
 const pkg = require('./package.json');
 
@@ -18,7 +19,8 @@ export default {
       format: 'umd',
       sourcemap: true,
       globals: {
-        react: 'React'
+        react: 'React',
+        'react-dom': 'ReactDOM'
       }
     },
     {
@@ -46,5 +48,19 @@ export default {
 
     // Resolve source maps to the original source
     sourceMaps()
+    /*
+    terser({
+      sourcemap: true,
+      output: { comments: false },
+      compress: {
+        pure_getters: true
+      },
+      warnings: true,
+      ecma: 5,
+      // Compress and/or mangle variables in top level scope.
+      // @see https://github.com/terser-js/terser
+      toplevel: true
+    })
+    */
   ]
 };

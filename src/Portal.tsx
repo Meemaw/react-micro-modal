@@ -29,7 +29,9 @@ class ModalPortal extends React.Component<Props> {
   }
 
   getParent = (): HTMLElement => {
-    return this.props.parentSelector ? this.props.parentSelector() : document.body;
+    return this.props.parentSelector
+      ? this.props.parentSelector()
+      : document.body;
   };
 
   render() {
