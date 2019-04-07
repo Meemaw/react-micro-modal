@@ -4,12 +4,17 @@ import { focusFirstNode, handleTabPress } from './focus';
 import ModalPortal, { PortalBaseProps } from './Portal';
 import { CONTAINER_BASE_STYLE, OVERLAY_BASE_STYLE } from './styles';
 
-const initialState = Object.freeze({
-  open: false,
-  isClosing: false
-});
+type State = {
+  isClosing: boolean;
+  open: boolean;
+};
 
-type State = typeof initialState;
+function getInitialState(props: Props): State {
+  return {
+    isClosing: false,
+    open: props.initiallyOpen || false
+  };
+}
 
 type OptionalProps = {
   closeOnEscapeClick?: boolean;
@@ -20,6 +25,7 @@ type OptionalProps = {
   closeOnAnimationEnd?: boolean;
   modalClassName?: string;
   modalOverlayClassName?: string;
+  initiallyOpen?: boolean;
 };
 
 interface Props extends PortalBaseProps, OptionalProps {
@@ -40,7 +46,7 @@ function getLastOpenContainer(): React.RefObject<HTMLDivElement> {
 }
 
 class MicroModal extends React.PureComponent<Props, State> {
-  readonly state: State = initialState;
+  readonly state: State = getInitialState(this.props);
 
   static defaultProps: OptionalProps = {
     disableFocus: false,
@@ -50,8 +56,15 @@ class MicroModal extends React.PureComponent<Props, State> {
     closeOnOverlayClick: true,
     closeOnAnimationEnd: false,
     modalOverlayClassName: '',
-    modalClassName: ''
+    modalClassName: '',
+    initiallyOpen: false
   };
+
+  componentDidMount() {
+    if (this.props.initiallyOpen && !this.props.disableFocus) {
+      this.focusFirstNode();
+    }
+  }
 
   isControlled = this.props.open !== undefined;
   modalRef = React.createRef<HTMLDivElement>();

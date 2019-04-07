@@ -127,6 +127,12 @@ describe('Micro modal', () => {
         );
       });
 
+      it('Should be initially open with first element focues', () => {
+        shouldBeInitiallyOpenWithFocuesElement(
+          render(<ModalComponent initiallyOpen={true} />)
+        );
+      });
+
       it('Should be able to apply custom className to modal', () => {
         shouldBeAbleToApplyCustomClassName(
           render(
@@ -139,17 +145,14 @@ describe('Micro modal', () => {
       });
     });
   });
-
-  describe('Controlled modal', () => {
-    it('Should be initially open on open prop passed', () => {
-      const { getByTestId } = render(
-        <ControlledTestModal initiallyOpen={true} />
-      );
-      const modalWrapper = getByTestId('micro-modal');
-      expectModalIsOpen(modalWrapper);
-    });
-  });
 });
+
+function shouldBeInitiallyOpenWithFocuesElement(renderResult: RenderResult) {
+  const { getByTestId, getByText } = renderResult;
+  let modalWrapper = getByTestId('micro-modal');
+  expectModalIsOpen(modalWrapper);
+  expect(getByText(firstFocusableElementText)).toBe(document.activeElement);
+}
 
 function shouldCloseAfterClosingAnimationEnds(renderResult: RenderResult) {
   const { getByTestId, getByText } = renderResult;

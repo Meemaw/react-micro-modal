@@ -12,6 +12,8 @@ type TestProps = {
   modalClassName?: string;
   modalOverlayClassName?: string;
   closeOnAnimationEnd?: boolean;
+  initiallyOpen?: boolean;
+  open?: boolean;
 };
 
 const UncontrolledTestModal = ({
@@ -19,7 +21,9 @@ const UncontrolledTestModal = ({
   closeOnOverlayClick = true,
   modalClassName = '',
   modalOverlayClassName = '',
-  closeOnAnimationEnd = false
+  closeOnAnimationEnd = false,
+  initiallyOpen = false,
+  open
 }: TestProps) => {
   return (
     <Modal
@@ -28,6 +32,8 @@ const UncontrolledTestModal = ({
       modalClassName={modalClassName}
       closeOnEscapeClick={closeOnEscapeClick}
       closeOnOverlayClick={closeOnOverlayClick}
+      initiallyOpen={initiallyOpen}
+      open={open}
       trigger={handleOpen => (
         <button onClick={handleOpen}>{openModalTriggerText}</button>
       )}
@@ -37,10 +43,6 @@ const UncontrolledTestModal = ({
   );
 };
 
-interface ControlledTestProps extends TestProps {
-  initiallyOpen?: boolean;
-}
-
 const ControlledTestModal = ({
   initiallyOpen = false,
   closeOnEscapeClick = true,
@@ -48,7 +50,7 @@ const ControlledTestModal = ({
   modalClassName = '',
   modalOverlayClassName = '',
   closeOnAnimationEnd = false
-}: ControlledTestProps) => {
+}: TestProps) => {
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <div>
@@ -59,6 +61,7 @@ const ControlledTestModal = ({
         modalOverlayClassName={modalOverlayClassName}
         closeOnEscapeClick={closeOnEscapeClick}
         closeOnOverlayClick={closeOnOverlayClick}
+        initiallyOpen={initiallyOpen}
         open={open}
         handleClose={() => setOpen(false)}
       >
