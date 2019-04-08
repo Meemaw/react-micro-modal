@@ -12,28 +12,30 @@ type State = {
 function getInitialState(props: Props): State {
   return {
     isClosing: false,
-    open: props.initiallyOpen || false
+    open: props.openInitially || false
   };
 }
 
 type OptionalProps = {
-  closeOnEscapeClick?: boolean;
+  closeOnEscapePress?: boolean;
   closeOnOverlayClick?: boolean;
-  modalOverlayStyle?: React.CSSProperties;
-  containerStyle?: React.CSSProperties;
-  disableFocus?: boolean;
+  modalOverlayStyles?: React.CSSProperties;
+  containerStyles?: React.CSSProperties;
+  disableFirstElementFocus?: boolean;
   closeOnAnimationEnd?: boolean;
   modalClassName?: string;
   modalOverlayClassName?: string;
-  initiallyOpen?: boolean;
+  openInitially?: boolean;
 };
 
-interface Props extends PortalBaseProps, OptionalProps {
-  children: (handleClose: () => void) => React.ReactNode;
+export interface BaseProps extends PortalBaseProps, OptionalProps {
   trigger?: (handleOpen: () => void) => React.ReactNode;
   open?: boolean;
   handleClose?: () => void;
-  id?: string;
+}
+
+interface Props extends BaseProps {
+  children: (handleClose: () => void) => React.ReactNode;
 }
 
 const ESCAPE_KEY: 'Escape' = 'Escape';
@@ -49,19 +51,19 @@ class MicroModal extends React.PureComponent<Props, State> {
   readonly state: State = getInitialState(this.props);
 
   static defaultProps: OptionalProps = {
-    disableFocus: false,
-    modalOverlayStyle: {},
-    containerStyle: {},
-    closeOnEscapeClick: true,
+    disableFirstElementFocus: false,
+    modalOverlayStyles: {},
+    containerStyles: {},
+    closeOnEscapePress: true,
     closeOnOverlayClick: true,
     closeOnAnimationEnd: false,
     modalOverlayClassName: '',
     modalClassName: '',
-    initiallyOpen: false
+    openInitially: false
   };
 
   componentDidMount() {
-    if (this.props.initiallyOpen && !this.props.disableFocus) {
+    if (this.props.openInitially && !this.props.disableFirstElementFocus) {
       this.focusFirstNode();
     }
   }
@@ -157,7 +159,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   private focusFirstNode(): void {
-    if (this.props.disableFocus) {
+    if (this.props.disableFirstElementFocus) {
       return;
     }
 
@@ -184,7 +186,7 @@ class MicroModal extends React.PureComponent<Props, State> {
 
   private onKeydown = (event: KeyboardEvent): void => {
     if (this.containerRef === getLastOpenContainer()) {
-      if (event.key === ESCAPE_KEY && this.props.closeOnEscapeClick) {
+      if (event.key === ESCAPE_KEY && this.props.closeOnEscapePress) {
         this.handleClose();
       }
       if (event.key === TAB_KEY) {
@@ -224,7 +226,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     const { zIndex, ...restOverlayStyle } = overlayStyle;
 
     return (
-      <ModalPortal parentSelector={parentSelector}>
+      <ModalPortal parentSelector={parentSelector} id={this.props.id}>
         <div
           className={modalClassName}
           aria-hidden={ariaHidden}
@@ -243,7 +245,7 @@ class MicroModal extends React.PureComponent<Props, State> {
           >
             <div
               className="modal-container"
-              style={{ ...CONTAINER_BASE_STYLE, ...this.props.containerStyle }}
+              style={{ ...CONTAINER_BASE_STYLE, ...this.props.containerStyles }}
               role="dialog"
               aria-modal="true"
               ref={this.containerRef}
@@ -258,7 +260,12 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { trigger, children, modalOverlayStyle, parentSelector } = this.props;
+    const {
+      trigger,
+      children,
+      modalOverlayStyles,
+      parentSelector
+    } = this.props;
     const { open, isClosing } = this.state;
 
     return (
@@ -267,7 +274,7 @@ class MicroModal extends React.PureComponent<Props, State> {
           open,
           isClosing,
           children,
-          modalOverlayStyle!,
+          modalOverlayStyles!,
           parentSelector
         )}
         {trigger !== undefined && trigger(this.handleOpen)}

@@ -1,39 +1,32 @@
 import React, { useState } from 'react';
 
+import { BaseProps } from '../../src';
 import Modal from '../../src/react-micro-modal';
 
 export const closeModalElementText = 'Close';
 export const openModalTriggerText = 'Trigger';
 export const firstFocusableElementText = 'Anchor element';
 
-type TestProps = {
-  closeOnEscapeClick?: boolean;
-  closeOnOverlayClick?: boolean;
-  modalClassName?: string;
-  modalOverlayClassName?: string;
-  closeOnAnimationEnd?: boolean;
-  initiallyOpen?: boolean;
-  open?: boolean;
-};
-
 const UncontrolledTestModal = ({
-  closeOnEscapeClick = true,
+  closeOnEscapePress = true,
   closeOnOverlayClick = true,
   modalClassName = '',
   modalOverlayClassName = '',
   closeOnAnimationEnd = false,
-  initiallyOpen = false,
-  open
-}: TestProps) => {
+  openInitially = false,
+  open,
+  disableFirstElementFocus = false
+}: BaseProps) => {
   return (
     <Modal
       modalOverlayClassName={modalOverlayClassName}
       closeOnAnimationEnd={closeOnAnimationEnd}
       modalClassName={modalClassName}
-      closeOnEscapeClick={closeOnEscapeClick}
+      closeOnEscapePress={closeOnEscapePress}
       closeOnOverlayClick={closeOnOverlayClick}
-      initiallyOpen={initiallyOpen}
+      openInitially={openInitially}
       open={open}
+      disableFirstElementFocus={disableFirstElementFocus}
       trigger={handleOpen => (
         <button onClick={handleOpen}>{openModalTriggerText}</button>
       )}
@@ -44,14 +37,15 @@ const UncontrolledTestModal = ({
 };
 
 const ControlledTestModal = ({
-  initiallyOpen = false,
-  closeOnEscapeClick = true,
+  openInitially = false,
+  closeOnEscapePress = true,
   closeOnOverlayClick = true,
   modalClassName = '',
   modalOverlayClassName = '',
-  closeOnAnimationEnd = false
-}: TestProps) => {
-  const [open, setOpen] = useState(initiallyOpen);
+  closeOnAnimationEnd = false,
+  disableFirstElementFocus = false
+}: BaseProps) => {
+  const [open, setOpen] = useState(openInitially);
   return (
     <div>
       <button onClick={() => setOpen(true)}>{openModalTriggerText}</button>
@@ -59,9 +53,10 @@ const ControlledTestModal = ({
         closeOnAnimationEnd={closeOnAnimationEnd}
         modalClassName={modalClassName}
         modalOverlayClassName={modalOverlayClassName}
-        closeOnEscapeClick={closeOnEscapeClick}
+        closeOnEscapePress={closeOnEscapePress}
+        disableFirstElementFocus={disableFirstElementFocus}
         closeOnOverlayClick={closeOnOverlayClick}
-        initiallyOpen={initiallyOpen}
+        openInitially={openInitially}
         open={open}
         handleClose={() => setOpen(false)}
       >

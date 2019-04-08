@@ -95,7 +95,7 @@ describe('Micro modal', () => {
 
       it('Open modal should not close on escape key press', () => {
         openModalShouldNotCloseOnEscapeKeyPress(
-          render(<ModalComponent closeOnEscapeClick={false} />)
+          render(<ModalComponent closeOnEscapePress={false} />)
         );
       });
 
@@ -128,8 +128,14 @@ describe('Micro modal', () => {
       });
 
       it('Should be initially open with first element focues', () => {
-        shouldBeInitiallyOpenWithFocuesElement(
-          render(<ModalComponent initiallyOpen={true} />)
+        shouldBeInitiallyOpenWithFocusedElement(
+          render(<ModalComponent openInitially={true} />)
+        );
+      });
+
+      it('Should not focus first element when focus disabled', () => {
+        shouldNotFocusFirstElementOnDisableFocus(
+          render(<ModalComponent disableFirstElementFocus />)
         );
       });
 
@@ -147,7 +153,15 @@ describe('Micro modal', () => {
   });
 });
 
-function shouldBeInitiallyOpenWithFocuesElement(renderResult: RenderResult) {
+function shouldNotFocusFirstElementOnDisableFocus(renderResult: RenderResult) {
+  const { getByTestId, getByText } = renderResult;
+  let modalWrapper = getByTestId('micro-modal');
+  openModal(getByText);
+  expectModalIsOpen(modalWrapper);
+  expect(getByText(firstFocusableElementText)).not.toBe(document.activeElement);
+}
+
+function shouldBeInitiallyOpenWithFocusedElement(renderResult: RenderResult) {
   const { getByTestId, getByText } = renderResult;
   let modalWrapper = getByTestId('micro-modal');
   expectModalIsOpen(modalWrapper);

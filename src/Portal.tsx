@@ -3,22 +3,23 @@ import ReactDOM from 'react-dom';
 
 export interface PortalBaseProps {
   parentSelector?: () => HTMLElement;
+  id?: string;
 }
 
 interface Props extends PortalBaseProps {
   children: React.ReactNode;
 }
 
-function portalNode(): HTMLDivElement {
+function portalNode(id?: string): HTMLDivElement {
   const el = document.createElement('div');
-  el.className = `modal-portal-${portalIndex++}`;
+  el.className = id ? `${id}-portal` : `micro-modal-portal-${portalIndex++}`;
   return el;
 }
 
 export let portalIndex = 1;
 
 class ModalPortal extends React.Component<Props> {
-  node = portalNode();
+  node = portalNode(this.props.id);
 
   componentDidMount() {
     this.getParent().appendChild(this.node);
