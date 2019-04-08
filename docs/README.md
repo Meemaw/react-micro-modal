@@ -34,7 +34,7 @@ import MicroModal from 'react-micro-modal';
   /*
     Boolean describing if the modal should be open on first render. (if used as a uncontrolled component, else just use open)
   */
-  initiallyOpen={false}
+  openInitially={false}
   /*
     Function that recieves a handleClose function and should render the modal content.
   */
@@ -46,7 +46,7 @@ import MicroModal from 'react-micro-modal';
   /*
     Boolean indicating whether to close modal on escape keypress
   */
-  closeOnEscapeClick={true}
+  closeOnEscapePress={true}
   /*
     Boolean indicating whether to close modal on document click (outside of modal content)
   */
@@ -54,7 +54,7 @@ import MicroModal from 'react-micro-modal';
   /*
     Boolean indicating whether focus should be given to first element in modal after it got open
   */
-  disableFocus={false}
+  disableFirstElementFocus={false}
   /*
     Boolean indicating whether an animation should be used when closing the modal. Animation has to be applied as the modal is waiting for the "animationend" DOM event. Basic animation is provided and can be imported from "react-micro-modal/dist/index.css".
   */
@@ -70,10 +70,10 @@ import MicroModal from 'react-micro-modal';
   /*
     CSSProperties to be applied to the modal overlay element
   */
-  modalOverlayStyle={{ background: 'red' }}
+  modalOverlayStyles={{ background: 'red' }}
   /*
     CSSProperties to be applied to the modal container element
   */
-  containerStyle={{ background: 'red' }}
+  containerStyles={{ background: 'red' }}
 />;
 ```

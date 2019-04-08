@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MicroModal from '../src';
+import MicroModal, { BaseProps } from '../src';
 
 type ContentProps = {
   handleClose: () => void;
@@ -58,19 +58,7 @@ const StoryModalContent = ({ handleClose }: ContentProps) => {
   );
 };
 
-type StoryModalProps = {
-  closeOnEscapeClick?: boolean;
-  closeOnOverlayClick?: boolean;
-  modalOverlayStyle?: React.CSSProperties;
-  containerStyle?: React.CSSProperties;
-  disableFocus?: boolean;
-  closeOnAnimationEnd?: boolean;
-  modalClassName?: string;
-  modalOverlayClassName?: string;
-  initiallyOpen?: boolean;
-};
-
-const StoryUncontrolledModal = (props: StoryModalProps) => (
+const StoryUncontrolledModal = (props: BaseProps) => (
   <MicroModal
     trigger={handleOpen => (
       <button role="button" onClick={handleOpen}>

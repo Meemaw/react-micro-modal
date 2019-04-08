@@ -5,18 +5,18 @@ import { StoryUncontrolledModal } from './components';
 
 storiesOf('react-micro-modal', module)
   .add('Default', () => <StoryUncontrolledModal />)
-  .add('Initially open', () => <StoryUncontrolledModal initiallyOpen={true} />)
-  .add('Modal closing animation', () => (
+  .add('Initially open', () => <StoryUncontrolledModal openInitially={true} />)
+  .add('Animate modal closing', () => (
     <StoryUncontrolledModal closeOnAnimationEnd={true} />
   ))
   .add("Doesn't close on escape click", () => (
-    <StoryUncontrolledModal closeOnEscapeClick={false} />
+    <StoryUncontrolledModal closeOnEscapePress={false} />
   ))
   .add("Doesn't close on document click", () => (
     <StoryUncontrolledModal closeOnOverlayClick={false} />
   ))
-  .add('Disable focusing first element on afterOpen', () => (
-    <StoryUncontrolledModal disableFocus={true} />
+  .add('Disable first element focus on modal open', () => (
+    <StoryUncontrolledModal disableFirstElementFocus={true} />
   ))
 
   .add('Custom className', () => (
