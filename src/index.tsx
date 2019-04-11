@@ -71,7 +71,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   isControlled = this.props.open !== undefined;
   modalRef = React.createRef<HTMLDivElement>();
   containerRef = React.createRef<HTMLDivElement>();
-  focusedElement?: HTMLElement;
+  lastElement?: HTMLElement;
 
   static getDerivedStateFromProps(props: Props, state: State) {
     if (props.open !== undefined && props.open !== state.open) {
@@ -111,6 +111,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   private onAfterOpen = (): void => {
+    this.lastElement = document.activeElement as HTMLElement;
     openContainerRefStack.push(this.containerRef);
     this.addEventListeners();
     this.focusFirstNode();
@@ -150,12 +151,12 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   private onAfterClose = (): void => {
-    openContainerRefStack.pop();
-    if (openContainerRefStack.length > 0) {
-      focusFirstNode(getLastOpenContainer());
-    }
     this.removeEventListeners();
-    this.focusedElement = undefined;
+    openContainerRefStack.pop();
+    if (this.lastElement) {
+      this.lastElement.focus();
+      this.lastElement = undefined;
+    }
   };
 
   private focusFirstNode(): void {
@@ -163,7 +164,7 @@ class MicroModal extends React.PureComponent<Props, State> {
       return;
     }
 
-    this.focusedElement = focusFirstNode(this.containerRef);
+    focusFirstNode(this.containerRef);
   }
 
   private removeEventListeners = (): void => {
@@ -187,17 +188,14 @@ class MicroModal extends React.PureComponent<Props, State> {
   private onKeydown = (event: KeyboardEvent): void => {
     if (this.containerRef === getLastOpenContainer()) {
       if (event.key === ESCAPE_KEY && this.props.closeOnEscapePress) {
+        event.stopPropagation();
         this.handleClose();
       }
       if (event.key === TAB_KEY) {
-        this.focusedElement = handleTabPress(this.containerRef, event);
+        handleTabPress(this.containerRef, event);
       }
     }
   };
-
-  private getOverlayZIndex(): number {
-    return openContainerRefStack.findIndex(r => r === this.containerRef);
-  }
 
   private renderContent = (
     open: boolean,
@@ -239,7 +237,6 @@ class MicroModal extends React.PureComponent<Props, State> {
             className={baseModalOverlayClassName}
             style={{
               ...OVERLAY_BASE_STYLE,
-              zIndex: zIndex || this.getOverlayZIndex(),
               ...restOverlayStyle
             }}
           >

@@ -61,9 +61,26 @@ const StoryModalContent = ({ handleClose }: ContentProps) => {
 const StoryUncontrolledModal = (props: BaseProps) => (
   <MicroModal
     trigger={handleOpen => (
-      <button role="button" onClick={handleOpen}>
-        Open modal
-      </button>
+      <div
+        style={{
+          width: '400px',
+          height: '400px',
+          background: '#F06292',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          textAlign: 'center'
+        }}
+      >
+        <div>
+          <button
+            style={{ border: 'none', padding: '16px', borderRadius: '12px' }}
+            onClick={handleOpen}
+          >
+            Open modal
+          </button>
+        </div>
+      </div>
     )}
     {...props}
   >
