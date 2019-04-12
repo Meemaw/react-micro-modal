@@ -39,7 +39,6 @@
     "test:prod": "yarn lint && yarn test -- --no-cache",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
     "semantic-release": "semantic-release",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o .out",
