@@ -9,6 +9,17 @@ module.exports = ({ baseConfig, env, config }) => {
     }
   });
 
+  config.module.rules.push({
+    test: /Uncontrolled.tsx$/,
+    loaders: [
+      {
+        loader: require.resolve('@storybook/addon-storysource/loader'),
+        options: { parser: 'typescript' }
+      }
+    ],
+    enforce: 'pre'
+  });
+
   config.resolve.extensions.push('.ts', '.tsx');
 
   config.plugins.push(
