@@ -13,6 +13,22 @@ code {
   justify-content: space-between;
 }
 
+.trigger-wrapper {
+  width: 400px;
+  height: 400px;
+  background: #f06292;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.trigger-wrapper button {
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+}
+
 .heading {
   margin: 0px;
 }
