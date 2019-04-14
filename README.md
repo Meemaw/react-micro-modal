@@ -15,7 +15,7 @@ _Accessible, lightweight and configurable modal component with a11y-enabled insp
 
 ## Features
 
-- Micro bundle - 2.37 KB 📦 
+- Micro bundle - 2.37 KB 📦
 - a11y friendly 👓
 - Supports nested modals
 - Focuses on the first focusable element within the modal
@@ -23,7 +23,6 @@ _Accessible, lightweight and configurable modal component with a11y-enabled insp
 - Closes on document click
 - Closes on `Escape` keypress
 - Usage as controlled or uncontrolled component
-
 
 ## Example
 
@@ -55,6 +54,6 @@ OR
 To run that demo on your own computer:
 
 - Clone this repository
-- `npm install`
-- `npm run storybook`
+- `yarn install`
+- `yarn storybook`
 - Visit http://localhost:9001/
