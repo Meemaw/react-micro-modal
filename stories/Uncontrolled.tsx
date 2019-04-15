@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import MicroModal, { BaseProps } from '../src';
 
@@ -30,7 +30,41 @@ storiesOf('react-micro-modal', module)
       closeOnAnimationEnd={true}
       modalOverlayClassName="custom-animation"
     />
-  ));
+  ))
+  .add('As Toast', () =>
+    React.createElement(() => {
+      const [open, setOpen] = useState(false);
+
+      return (
+        <React.Fragment>
+          <button
+            onClick={() => {
+              setOpen(true);
+              setTimeout(() => setOpen(false), 2000);
+            }}
+          >
+            Show toast!
+          </button>
+          <MicroModal
+            open={open}
+            closeOnAnimationEnd={true}
+            modalOverlayStyles={{
+              justifyContent: 'flex-end',
+              alignItems: 'flex-start'
+            }}
+            containerStyles={{
+              marginTop: '16px',
+              marginRight: '16px'
+            }}
+          >
+            {_ => {
+              return <div>I'm a toast, closing in 2 seconds!</div>;
+            }}
+          </MicroModal>
+        </React.Fragment>
+      );
+    })
+  );
 
 const StoryModal = (props: BaseProps) => (
   <MicroModal
