@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 
 export interface PortalBaseProps {
@@ -18,24 +18,24 @@ function portalNode(id?: string): HTMLDivElement {
   return el;
 }
 
-class ModalPortal extends React.Component<Props> {
-  node = portalNode(this.props.id);
+const ModalPortal: React.FC<Props> = ({ id, parentSelector, children }) => {
+  const node = useMemo(() => portalNode(id), [id]);
 
-  componentDidMount() {
-    this.getParent().appendChild(this.node);
-  }
-
-  componentWillUnmount() {
-    this.getParent().removeChild(this.node);
-  }
-
-  getParent = (): HTMLElement => {
-    return this.props.parentSelector ? this.props.parentSelector() : document.body;
+  const getParent = (): HTMLElement => {
+    return parentSelector ? parentSelector() : document.body;
   };
 
-  render() {
-    return ReactDOM.createPortal(this.props.children, this.node);
-  }
-}
+  useEffect(() => {
+    getParent().appendChild(node);
+    return () => {
+      const lastParent = getParent();
+      if (lastParent.contains(node)) {
+        lastParent.removeChild(node);
+      }
+    };
+  }, []);
+
+  return ReactDOM.createPortal(children, node);
+};
 
 export default ModalPortal;
