@@ -1,34 +1,12 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
-module.exports = ({ baseConfig, env, config }) => {
+module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
-    loader: require.resolve('babel-loader'),
-    options: {
-      presets: [require.resolve('babel-preset-react-app')]
-    }
-  });
-
-  config.module.rules.push({
-    test: /Uncontrolled.tsx$/,
-    loaders: [
+    use: [
       {
-        loader: require.resolve('@storybook/addon-storysource/loader'),
-        options: { parser: 'typescript' }
-      }
+        loader: require.resolve('awesome-typescript-loader'),
+      },
     ],
-    enforce: 'pre'
   });
-
   config.resolve.extensions.push('.ts', '.tsx');
-
-  config.plugins.push(
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-      checkSyntacticErrors: true,
-      formatter: require('react-dev-utils/typescriptFormatter')
-    })
-  );
-
   return config;
 };

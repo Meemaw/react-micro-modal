@@ -1,7 +1,7 @@
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
-export function fireShiftTabKey(element: Element = document.body) {
-  fireTabKey(element, true);
+function fireKeyDownEvent(element: Element = document.body, event: object) {
+  fireEvent.keyDown(element, event);
 }
 
 export function fireTabKey(element: Element = document.body, shiftKey = false) {
@@ -13,8 +13,12 @@ export function fireTabKey(element: Element = document.body, shiftKey = false) {
     altKey: false,
     ctrlKey: false,
     metaKey: false,
-    shiftKey
+    shiftKey,
   });
+}
+
+export function fireShiftTabKey(element: Element = document.body) {
+  fireTabKey(element, true);
 }
 
 export function fireDocumentClick(element: Element = document.body) {
@@ -25,10 +29,6 @@ export function fireEscapeKey(element: Element = document.body) {
   fireKeyDownEvent(element, {
     key: 'Escape',
     keyCode: 27,
-    which: 27
+    which: 27,
   });
-}
-
-function fireKeyDownEvent(element: Element = document.body, event: object) {
-  fireEvent.keyDown(element, event);
 }

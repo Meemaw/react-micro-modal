@@ -1,29 +1,28 @@
 import React from 'react';
-import {
-  fireEvent,
-  Matcher,
-  render,
-  RenderResult
-} from 'react-testing-library';
+import { render, act } from '@testing-library/react';
 
 import Modal from '../src/react-micro-modal';
+import { UncontrolledTestModal, ControlledTestModal } from './__helpers__/components';
 import {
-  closeModalElementText,
-  ControlledTestModal,
-  firstFocusableElementText,
-  openModalTriggerText,
-  UncontrolledTestModal
-} from './__helpers__/components';
-import {
-  fireDocumentClick,
-  fireEscapeKey,
-  fireShiftTabKey,
-  fireTabKey
-} from './__helpers__/events';
+  expectModalIsClosed,
+  expectModalIsOpen,
+  openModalShouldCloseOnEscapeKeyPress,
+  openModalshouldNotCloseOnDocumentClick,
+  shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost,
+  shouldBeAbleToApplyCustomClassName,
+  shouldNotFocusFirstElementOnDisableFocus,
+  shouldBeInitiallyOpenWithFocusedElement,
+  openModalShouldCloseOnDocumentClick,
+  shouldFocusFirstFocusableElementOnModalOpen,
+  shouldCloseAfterClosingAnimationEnds,
+  shouldFocusPreviousElementOnShiftAndTabClick,
+  openModalShouldNotCloseOnEscapeKeyPress,
+  modalShouldApplyCorrectClassNamesOnOpenToggle,
+} from './__helpers__/assertions';
 
 const MODAL_FIXTURES = [
   { description: 'Uncontrolled modal', ModalComponent: UncontrolledTestModal },
-  { description: 'Controlled modal', ModalComponent: ControlledTestModal }
+  { description: 'Controlled modal', ModalComponent: ControlledTestModal },
 ];
 
 describe('Micro modal', () => {
@@ -34,9 +33,7 @@ describe('Micro modal', () => {
   describe('Nested modal', () => {
     it('Should open and close nested modals on triggers', () => {
       const { getByTestId, getByText } = render(
-        <Modal
-          trigger={handleOpen => <div onClick={handleOpen}>Open modal</div>}
-        >
+        <Modal trigger={handleOpen => <div onClick={handleOpen}>Open modal</div>}>
           {handleClose => (
             <Modal
               id="nested-micro-modal"
@@ -47,19 +44,19 @@ describe('Micro modal', () => {
                 </div>
               )}
             >
-              {handleClose => (
-                <div onClick={handleClose}>Close nested modal</div>
-              )}
+              {handleClose => <div onClick={handleClose}>Close nested modal</div>}
             </Modal>
           )}
-        </Modal>
+        </Modal>,
       );
-      let modalWrapper = getByTestId('micro-modal');
+      const modalWrapper = getByTestId('micro-modal');
 
       expectModalIsClosed(modalWrapper);
-      getByText('Open modal').click();
+      act(() => {
+        getByText('Open modal').click();
+      });
 
-      let nestedModalWrapper = getByTestId('nested-micro-modal');
+      const nestedModalWrapper = getByTestId('nested-micro-modal');
       expectModalIsOpen(modalWrapper);
       expectModalIsClosed(nestedModalWrapper);
 
@@ -80,9 +77,7 @@ describe('Micro modal', () => {
   MODAL_FIXTURES.forEach(({ description, ModalComponent }) => {
     describe(description, () => {
       it('Should apply correct classnames and attributes on modal toggle', () => {
-        modalShouldApplyCorrectClassNamesOnOpenToggle(
-          render(<ModalComponent />)
-        );
+        modalShouldApplyCorrectClassNamesOnOpenToggle(render(<ModalComponent />));
       });
 
       it('Open modal should close on escape key press', () => {
@@ -95,13 +90,13 @@ describe('Micro modal', () => {
 
       it('Open modal should not close on escape key press', () => {
         openModalShouldNotCloseOnEscapeKeyPress(
-          render(<ModalComponent closeOnEscapePress={false} />)
+          render(<ModalComponent closeOnEscapePress={false} />),
         );
       });
 
       it('Open modal should not close on document click', () => {
         openModalshouldNotCloseOnDocumentClick(
-          render(<ModalComponent closeOnOverlayClick={false} />)
+          render(<ModalComponent closeOnOverlayClick={false} />),
         );
       });
 
@@ -110,32 +105,24 @@ describe('Micro modal', () => {
       });
 
       it('Should focus previous element on shift+tab click', () => {
-        shouldFocusPreviousElementOnShiftAndTabClick(
-          render(<ModalComponent />)
-        );
+        shouldFocusPreviousElementOnShiftAndTabClick(render(<ModalComponent />));
       });
 
       it('Should focus first focusable element on tab press if focus is lost', () => {
-        shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost(
-          render(<ModalComponent />)
-        );
+        shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost(render(<ModalComponent />));
       });
 
       it('Open modal should close after closing animation ends', () => {
-        shouldCloseAfterClosingAnimationEnds(
-          render(<ModalComponent closeOnAnimationEnd={true} />)
-        );
+        shouldCloseAfterClosingAnimationEnds(render(<ModalComponent closeOnAnimationEnd={true} />));
       });
 
       it('Should be initially open with first element focues', () => {
-        shouldBeInitiallyOpenWithFocusedElement(
-          render(<ModalComponent openInitially={true} />)
-        );
+        shouldBeInitiallyOpenWithFocusedElement(render(<ModalComponent openInitially={true} />));
       });
 
       it('Should not focus first element when focus disabled', () => {
         shouldNotFocusFirstElementOnDisableFocus(
-          render(<ModalComponent disableFirstElementFocus />)
+          render(<ModalComponent disableFirstElementFocus />),
         );
       });
 
@@ -145,153 +132,10 @@ describe('Micro modal', () => {
             <ModalComponent
               modalClassName="custom-class"
               modalOverlayClassName=" my-custom-animation-class and-random-more "
-            />
-          )
+            />,
+          ),
         );
       });
     });
   });
 });
-
-function shouldNotFocusFirstElementOnDisableFocus(renderResult: RenderResult) {
-  const { getByTestId, getByText } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  openModal(getByText);
-  expectModalIsOpen(modalWrapper);
-  expect(getByText(firstFocusableElementText)).not.toBe(document.activeElement);
-}
-
-function shouldBeInitiallyOpenWithFocusedElement(renderResult: RenderResult) {
-  const { getByTestId, getByText } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsOpen(modalWrapper);
-  expect(getByText(firstFocusableElementText)).toBe(document.activeElement);
-}
-
-function shouldCloseAfterClosingAnimationEnds(renderResult: RenderResult) {
-  const { getByTestId, getByText } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  openModal(getByText);
-  expectModalIsOpen(modalWrapper);
-  closeModal(getByText);
-  expect(modalWrapper.className).toBe('modal modal-slide is-open');
-  expect(modalWrapper.getAttribute('aria-hidden')).toBe('true');
-  fireEvent.animationEnd(getByTestId('micro-modal__container'));
-  expectModalIsClosed(modalWrapper);
-}
-
-function shouldBeAbleToApplyCustomClassName(renderResult: RenderResult) {
-  const { getByTestId } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  expect(modalWrapper.className).toBe('modal modal-slide custom-class');
-  const child = modalWrapper.firstElementChild as HTMLDivElement;
-  expect(child.className).toBe(
-    'modal-overlay my-custom-animation-class and-random-more'
-  );
-}
-
-function modalShouldApplyCorrectClassNamesOnOpenToggle(
-  renderResult: RenderResult
-) {
-  const { getByTestId, getByText } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsClosed(modalWrapper);
-  openModal(getByText);
-  expectModalIsOpen(modalWrapper);
-  closeModal(getByText);
-  expectModalIsClosed(modalWrapper);
-}
-
-function openModalShouldCloseOnEscapeKeyPress(renderResult: RenderResult) {
-  const { getByText, getByTestId } = renderResult;
-  openModal(getByText);
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsOpen(modalWrapper);
-  fireEscapeKey(modalWrapper);
-  expectModalIsClosed(modalWrapper);
-}
-
-function openModalshouldNotCloseOnDocumentClick(renderResult: RenderResult) {
-  const { getByTestId, getByText } = renderResult;
-  openModal(getByText);
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsOpen(modalWrapper);
-  fireDocumentClick(modalWrapper);
-  expectModalIsOpen(modalWrapper);
-}
-
-function openModalShouldCloseOnDocumentClick(renderResult: RenderResult) {
-  const { getByTestId, getByText } = renderResult;
-  openModal(getByText);
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsOpen(modalWrapper);
-  fireDocumentClick(modalWrapper);
-  expectModalIsClosed(modalWrapper);
-}
-
-function openModalShouldNotCloseOnEscapeKeyPress(renderResult: RenderResult) {
-  const { getByText, getByTestId } = renderResult;
-  openModal(getByText);
-  let modalWrapper = getByTestId('micro-modal');
-  expectModalIsOpen(modalWrapper);
-  fireEscapeKey(modalWrapper);
-  expectModalIsOpen(modalWrapper);
-}
-
-function shouldFocusFirstFocusableElementOnModalOpen(
-  renderResult: RenderResult
-) {
-  expectFirstElementFocusableAfterModalOpens(renderResult.getByText);
-}
-
-function shouldFocusPreviousElementOnShiftAndTabClick(
-  renderResult: RenderResult
-) {
-  const { getByText, getByTestId } = renderResult;
-  let modalWrapper = getByTestId('micro-modal');
-  expectFirstElementFocusableAfterModalOpens(getByText);
-  fireShiftTabKey(modalWrapper);
-  expect(getByText(closeModalElementText)).toBe(document.activeElement);
-  fireTabKey(modalWrapper);
-  expect(getByText(firstFocusableElementText)).toBe(document.activeElement);
-}
-
-function shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost(
-  renderResult: RenderResult
-) {
-  const { getByText, getByTestId } = renderResult;
-  expectFirstElementFocusableAfterModalOpens(getByText);
-  let modalWrapper = getByTestId('micro-modal');
-  let tempFocusedElement = document.createElement('input');
-  document.body.appendChild(tempFocusedElement);
-  tempFocusedElement.focus();
-  expect(tempFocusedElement).toBe(document.activeElement);
-  document.body.removeChild(tempFocusedElement);
-  fireTabKey(modalWrapper);
-  expect(getByText(firstFocusableElementText)).toBe(document.activeElement);
-}
-
-function expectModalIsClosed(modal: HTMLElement) {
-  expect(modal.className).toBe('modal modal-slide');
-  expect(modal.getAttribute('aria-hidden')).toBe('true');
-}
-
-function expectModalIsOpen(modal: HTMLElement) {
-  expect(modal.className).toBe('modal modal-slide is-open');
-  expect(modal.getAttribute('aria-hidden')).toBe('false');
-}
-
-function expectFirstElementFocusableAfterModalOpens(
-  getByText: (text: Matcher) => HTMLElement
-) {
-  openModal(getByText);
-  expect(getByText(firstFocusableElementText)).toBe(document.activeElement);
-}
-
-function closeModal(getByText: (text: Matcher) => HTMLElement) {
-  getByText(closeModalElementText).click();
-}
-
-function openModal(getByText: (text: Matcher) => HTMLElement) {
-  getByText(openModalTriggerText).click();
-}

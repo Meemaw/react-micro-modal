@@ -12,7 +12,7 @@ type State = {
 function getInitialState(props: Props): State {
   return {
     isClosing: false,
-    open: props.openInitially || false
+    open: props.openInitially || false,
   };
 }
 
@@ -41,7 +41,7 @@ interface Props extends BaseProps {
 const ESCAPE_KEY: 'Escape' = 'Escape';
 const TAB_KEY: 'Tab' = 'Tab';
 
-let openContainerRefStack: React.RefObject<HTMLDivElement>[] = [];
+const openContainerRefStack: React.RefObject<HTMLDivElement>[] = [];
 
 function getLastOpenContainer(): React.RefObject<HTMLDivElement> {
   return openContainerRefStack[openContainerRefStack.length - 1];
@@ -59,7 +59,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     closeOnAnimationEnd: false,
     modalOverlayClassName: '',
     modalClassName: '',
-    openInitially: false
+    openInitially: false,
   };
 
   componentDidMount() {
@@ -81,10 +81,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (
-      (this.isControlled && prevProps.open !== this.state.open) ||
-      this.state.isClosing
-    ) {
+    if ((this.isControlled && prevProps.open !== this.state.open) || this.state.isClosing) {
       if (this.state.isClosing) {
         if (this.props.closeOnAnimationEnd) {
           this.closeOnAnimationEnd(this._handleCloseAnimationEnd);
@@ -98,6 +95,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   }
 
   private closeOnAnimationEnd = (handleClose: () => void): void => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const containerElement = this.containerRef.current!;
 
     containerElement.addEventListener('animationend', function handler() {
@@ -120,6 +118,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   private addEventListeners = (): void => {
     document.addEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.modalRef.current!.addEventListener('click', this.onClick);
     }
   };
@@ -135,9 +134,7 @@ class MicroModal extends React.PureComponent<Props, State> {
       if (this.props.handleClose) {
         this.props.handleClose();
       } else {
-        console.warn(
-          '[React-micro-modal]: cannot close modal - handleClose prop is not passed.'
-        );
+        console.warn('[React-micro-modal]: cannot close modal - handleClose prop is not passed.');
       }
     } else if (this.props.closeOnAnimationEnd) {
       this.startClosingUncontrolled();
@@ -170,6 +167,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   private removeEventListeners = (): void => {
     document.removeEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.modalRef.current!.removeEventListener('click', this.onClick);
     }
   };
@@ -202,25 +200,26 @@ class MicroModal extends React.PureComponent<Props, State> {
     isClosing: boolean,
     renderChildren: (handleClose: () => void) => React.ReactNode,
     overlayStyle: React.CSSProperties,
-    parentSelector: (() => HTMLElement) | undefined
+    parentSelector: (() => HTMLElement) | undefined,
   ): React.ReactNode => {
     const ariaHidden = open && !isClosing ? 'false' : 'true';
-    const baseModalClassName = open
-      ? `modal modal-slide is-open`
-      : `modal modal-slide`;
+    const baseModalClassName = open ? `modal modal-slide is-open` : `modal modal-slide`;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const customModalClassName = this.props.modalClassName!.trim();
 
     const modalClassName = customModalClassName
       ? `${baseModalClassName} ${customModalClassName}`
       : baseModalClassName;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const customModalOverlayClassName = this.props.modalOverlayClassName!.trim();
 
     const baseModalOverlayClassName = this.props.modalOverlayClassName
       ? `modal-overlay ${customModalOverlayClassName}`
       : 'modal-overlay';
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { zIndex, ...restOverlayStyle } = overlayStyle;
 
     return (
@@ -237,7 +236,7 @@ class MicroModal extends React.PureComponent<Props, State> {
             className={baseModalOverlayClassName}
             style={{
               ...OVERLAY_BASE_STYLE,
-              ...restOverlayStyle
+              ...restOverlayStyle,
             }}
           >
             <div
@@ -257,12 +256,7 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      trigger,
-      children,
-      modalOverlayStyles,
-      parentSelector
-    } = this.props;
+    const { trigger, children, modalOverlayStyles, parentSelector } = this.props;
     const { open, isClosing } = this.state;
 
     return (
@@ -271,8 +265,9 @@ class MicroModal extends React.PureComponent<Props, State> {
           open,
           isClosing,
           children,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           modalOverlayStyles!,
-          parentSelector
+          parentSelector,
         )}
         {trigger !== undefined && trigger(this.handleOpen)}
       </React.Fragment>

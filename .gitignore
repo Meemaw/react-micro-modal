@@ -1,13 +1,17 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
 node_modules
+.npmrc
+
+# testing
 coverage
-.nyc_output
-.DS_Store
-*.log
-.vscode
-.idea
+
+# build
 dist
 compiled
-.awcache
 .rpt2_cache
-.npmrc
-.out
+
+# misc
+.nyc_output
+.DS_Store
