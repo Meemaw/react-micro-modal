@@ -1,6 +1,8 @@
-import { addDecorator, configure } from '@storybook/react';
-import { withA11y } from '@storybook/addon-a11y';
+import { configure } from '@storybook/react';
 
-addDecorator(withA11y);
+function loadStories() {
+  const req = require.context('../stories', true, /\.stories\.tsx$/);
+  return req.keys().map(req);
+}
 
-configure(() => require('../stories/index'), module);
+configure(loadStories, module);
