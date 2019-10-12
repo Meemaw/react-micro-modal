@@ -20,7 +20,7 @@ jobs:
   include:
     - stage: deploy
       if: branch == master && !fork
-      node_js: '8.9.1' # pre-installed version
+      node_js: '10.16.0'
       script:
         - yarn build
         - npx semantic-release
