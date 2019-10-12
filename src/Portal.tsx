@@ -10,13 +10,13 @@ interface Props extends PortalBaseProps {
   children: React.ReactNode;
 }
 
+export let portalIndex = 1;
+
 function portalNode(id?: string): HTMLDivElement {
   const el = document.createElement('div');
   el.className = id ? `${id}-portal` : `micro-modal-portal-${portalIndex++}`;
   return el;
 }
-
-export let portalIndex = 1;
 
 class ModalPortal extends React.Component<Props> {
   node = portalNode(this.props.id);
@@ -30,9 +30,7 @@ class ModalPortal extends React.Component<Props> {
   }
 
   getParent = (): HTMLElement => {
-    return this.props.parentSelector
-      ? this.props.parentSelector()
-      : document.body;
+    return this.props.parentSelector ? this.props.parentSelector() : document.body;
   };
 
   render() {

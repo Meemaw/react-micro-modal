@@ -9,7 +9,7 @@ export const OVERLAY_BASE_STYLE: CSSProperties = {
   background: 'rgba(0, 0, 0, 0.6)',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
 };
 
 export const CONTAINER_BASE_STYLE: CSSProperties = {
@@ -19,5 +19,5 @@ export const CONTAINER_BASE_STYLE: CSSProperties = {
   maxHeight: '100vh',
   borderRadius: '4px',
   overflowY: 'auto',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
 };
