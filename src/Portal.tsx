@@ -28,10 +28,7 @@ const ModalPortal: React.FC<Props> = ({ id, parentSelector, children }) => {
   useEffect(() => {
     getParent().appendChild(node);
     return () => {
-      const lastParent = getParent();
-      if (lastParent.contains(node)) {
-        lastParent.removeChild(node);
-      }
+      getParent().removeChild(node);
     };
   }, []);
 

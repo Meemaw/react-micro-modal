@@ -32,7 +32,7 @@ describe('Micro modal', () => {
 
   describe('Nested modal', () => {
     it('Should open and close nested modals on triggers', () => {
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText, unmount } = render(
         <Modal trigger={handleOpen => <div onClick={handleOpen}>Open modal</div>}>
           {handleClose => (
             <Modal
@@ -56,6 +56,8 @@ describe('Micro modal', () => {
         getByText('Open modal').click();
       });
 
+      expect(document.body.querySelector('.nested-micro-modal-portal')).toBeTruthy();
+
       const nestedModalWrapper = getByTestId('nested-micro-modal');
       expectModalIsOpen(modalWrapper);
       expectModalIsClosed(nestedModalWrapper);
@@ -71,70 +73,91 @@ describe('Micro modal', () => {
       getByText('Close modal').click();
       expectModalIsClosed(modalWrapper);
       expectModalIsClosed(nestedModalWrapper);
+
+      // we clean nested modal after ourselves
+      expect(document.body.querySelector('.nested-micro-modal-portal')).toBeNull();
+
+      unmount();
     });
   });
 
   MODAL_FIXTURES.forEach(({ description, ModalComponent }) => {
     describe(description, () => {
       it('Should apply correct classnames and attributes on modal toggle', () => {
-        modalShouldApplyCorrectClassNamesOnOpenToggle(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        modalShouldApplyCorrectClassNamesOnOpenToggle(renderResult);
+        renderResult.unmount();
       });
 
       it('Open modal should close on escape key press', () => {
-        openModalShouldCloseOnEscapeKeyPress(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        openModalShouldCloseOnEscapeKeyPress(renderResult);
+        renderResult.unmount();
       });
 
       it('Open modal should close on document click', () => {
-        openModalShouldCloseOnDocumentClick(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        openModalShouldCloseOnDocumentClick(renderResult);
+        renderResult.unmount();
       });
 
       it('Open modal should not close on escape key press', () => {
-        openModalShouldNotCloseOnEscapeKeyPress(
-          render(<ModalComponent closeOnEscapePress={false} />),
-        );
+        const renderResult = render(<ModalComponent closeOnEscapePress={false} />);
+        openModalShouldNotCloseOnEscapeKeyPress(renderResult);
+        renderResult.unmount();
       });
 
       it('Open modal should not close on document click', () => {
-        openModalshouldNotCloseOnDocumentClick(
-          render(<ModalComponent closeOnOverlayClick={false} />),
-        );
+        const renderResult = render(<ModalComponent closeOnOverlayClick={false} />);
+        openModalshouldNotCloseOnDocumentClick(renderResult);
+        renderResult.unmount();
       });
 
       it('Should focus first focusable element on open', () => {
-        shouldFocusFirstFocusableElementOnModalOpen(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        shouldFocusFirstFocusableElementOnModalOpen(renderResult);
+        renderResult.unmount();
       });
 
       it('Should focus previous element on shift+tab click', () => {
-        shouldFocusPreviousElementOnShiftAndTabClick(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        shouldFocusPreviousElementOnShiftAndTabClick(renderResult);
+        renderResult.unmount();
       });
 
       it('Should focus first focusable element on tab press if focus is lost', () => {
-        shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost(render(<ModalComponent />));
+        const renderResult = render(<ModalComponent />);
+        shouldFocusFirstFocusableElementOnTabPressIfFocusIsLost(renderResult);
+        renderResult.unmount();
       });
 
       it('Open modal should close after closing animation ends', () => {
-        shouldCloseAfterClosingAnimationEnds(render(<ModalComponent closeOnAnimationEnd={true} />));
+        const renderResult = render(<ModalComponent closeOnAnimationEnd={true} />);
+        shouldCloseAfterClosingAnimationEnds(renderResult);
+        renderResult.unmount();
       });
 
       it('Should be initially open with first element focues', () => {
-        shouldBeInitiallyOpenWithFocusedElement(render(<ModalComponent openInitially={true} />));
+        const renderResult = render(<ModalComponent openInitially={true} />);
+        shouldBeInitiallyOpenWithFocusedElement(renderResult);
+        renderResult.unmount();
       });
 
       it('Should not focus first element when focus disabled', () => {
-        shouldNotFocusFirstElementOnDisableFocus(
-          render(<ModalComponent disableFirstElementFocus />),
-        );
+        const renderResult = render(<ModalComponent disableFirstElementFocus />);
+        shouldNotFocusFirstElementOnDisableFocus(renderResult);
+        renderResult.unmount();
       });
 
       it('Should be able to apply custom className to modal', () => {
-        shouldBeAbleToApplyCustomClassName(
-          render(
-            <ModalComponent
-              modalClassName="custom-class"
-              modalOverlayClassName=" my-custom-animation-class and-random-more "
-            />,
-          ),
+        const renderResult = render(
+          <ModalComponent
+            modalClassName="custom-class"
+            modalOverlayClassName=" my-custom-animation-class and-random-more "
+          />,
         );
+        shouldBeAbleToApplyCustomClassName(renderResult);
+        renderResult.unmount();
       });
     });
   });
