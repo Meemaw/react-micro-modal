@@ -10,26 +10,50 @@ export default {
 export const Default = () => <StoryModal />;
 
 export const InitiallyOpen = () => <StoryModal openInitially={true} />;
+InitiallyOpen.story = {
+  name: 'Initially open',
+};
 
 export const ModalClosingAnimation = () => <StoryModal closeOnAnimationEnd={true} />;
+ModalClosingAnimation.story = {
+  name: 'Closing animation',
+};
 
 export const NotClosingOnEscape = () => <StoryModal closeOnEscapePress={false} />;
+NotClosingOnEscape.story = {
+  name: 'Not closing on escape key press',
+};
 
 export const NotClosingOnDocumentClick = () => <StoryModal closeOnOverlayClick={false} />;
+NotClosingOnDocumentClick.story = {
+  name: 'Not closing on document click',
+};
 
 export const FirstElementFocusDisabled = () => <StoryModal disableFirstElementFocus={true} />;
+FirstElementFocusDisabled.story = {
+  name: 'Not focusing first element on modal open',
+};
 
 export const CustomStylingThroughClassname = () => (
   <StoryModal modalOverlayClassName="background--red" modalClassName="story--modal" />
 );
+CustomStylingThroughClassname.story = {
+  name: 'Custom styling through className',
+};
 
 export const CustomStylingThroughJsx = () => (
   <StoryModal containerStyles={{ background: 'red', maxWidth: '100%' }} />
 );
+CustomStylingThroughJsx.story = {
+  name: 'Custom styling through JSX',
+};
 
 export const CustomAnimations = () => (
   <StoryModal closeOnAnimationEnd={true} modalOverlayClassName="custom-animation" />
 );
+CustomAnimations.story = {
+  name: 'Custom animations',
+};
 
 export const AsToast = () => {
   const [open, setOpen] = useState(false);
@@ -63,6 +87,9 @@ export const AsToast = () => {
       </MicroModal>
     </React.Fragment>
   );
+};
+AsToast.story = {
+  name: 'As toast',
 };
 
 const StoryModal = (props: BaseProps) => (
