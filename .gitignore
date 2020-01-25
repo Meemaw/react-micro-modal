@@ -3,6 +3,7 @@
 # dependencies
 node_modules
 .npmrc
+yarn-error.log
 
 # testing
 coverage
