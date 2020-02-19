@@ -107,18 +107,18 @@ class MicroModal extends React.PureComponent<Props, State> {
     });
   };
 
-  private handleOpen = (): void => {
+  private handleOpen = () => {
     this.setState({ open: true }, this.onAfterOpen);
   };
 
-  private onAfterOpen = (): void => {
+  private onAfterOpen = () => {
     this.lastElement = document.activeElement as HTMLElement;
     openContainerRefStack.push(this.containerRef);
     this.addEventListeners();
     this.focusFirstNode();
   };
 
-  private addEventListeners = (): void => {
+  private addEventListeners = () => {
     document.addEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -126,7 +126,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  private startClosingUncontrolled = (): void => {
+  private startClosingUncontrolled = () => {
     this.setState({ isClosing: true }, () => {
       this.closeOnAnimationEnd(this._handleCloseAnimationEnd);
     });
@@ -146,11 +146,11 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  private _handleCloseAnimationEnd = (): void => {
+  private _handleCloseAnimationEnd = () => {
     this.setState({ open: false, isClosing: false }, this.onAfterClose);
   };
 
-  private onAfterClose = (): void => {
+  private onAfterClose = () => {
     this.removeEventListeners();
     openContainerRefStack.pop();
     if (this.lastElement) {
@@ -159,7 +159,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  private focusFirstNode(): void {
+  private focusFirstNode() {
     if (this.props.disableFirstElementFocus) {
       return;
     }
@@ -167,7 +167,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     focusFirstNode(this.containerRef);
   }
 
-  private removeEventListeners = (): void => {
+  private removeEventListeners = () => {
     document.removeEventListener('keydown', this.onKeydown);
     if (this.props.closeOnOverlayClick) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -175,7 +175,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  private onClick = (event: MouseEvent): void => {
+  private onClick = (event: MouseEvent) => {
     if (
       event.target &&
       this.containerRef.current &&
@@ -186,7 +186,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
-  private onKeydown = (event: KeyboardEvent): void => {
+  private onKeydown = (event: KeyboardEvent) => {
     if (this.containerRef === getLastOpenContainer()) {
       if (event.key === ESCAPE_KEY && this.props.closeOnEscapePress) {
         event.stopPropagation();
