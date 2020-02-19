@@ -1,5 +1,6 @@
 import './index.css';
 import React, { useState } from 'react';
+import './index.css';
 
 import MicroModal, { BaseProps } from '../src';
 
@@ -55,6 +56,32 @@ CustomAnimations.story = {
   name: 'Custom animations',
 };
 
+export const WithCustomZIndex = () => (
+  <>
+    <MicroModal
+      trigger={handleOpen => (
+        <div className="trigger-wrapper">
+          <div>
+            <button onClick={handleOpen}>Open modal</button>
+          </div>
+        </div>
+      )}
+      modalOverlayStyles={{ zIndex: 160 }}
+    >
+      {handleClose => (
+        <StoryModalContent handleClose={handleClose} modalOverlayStyles={{ zIndex: 160 }} />
+      )}
+    </MicroModal>
+    <input
+      placeholder="I should be under the overlay"
+      style={{ zIndex: 150, position: 'absolute' }}
+    />
+  </>
+);
+WithCustomZIndex.story = {
+  name: 'With custom z-index',
+};
+
 export const AsToast = () => {
   const [open, setOpen] = useState(false);
 
@@ -82,7 +109,7 @@ export const AsToast = () => {
         }}
       >
         {_ => {
-          return <div>I'm a toast, closing in 2 seconds!</div>;
+          return <div>I&apos;m a toast, closing in 2 seconds!</div>;
         }}
       </MicroModal>
     </React.Fragment>
@@ -107,7 +134,11 @@ const StoryModal = (props: BaseProps) => (
   </MicroModal>
 );
 
-const StoryModalContent = ({ handleClose }: { handleClose: () => void }) => {
+type StoryModalContentProps = BaseProps & {
+  handleClose: () => void;
+};
+
+const StoryModalContent = ({ handleClose, ...rest }: StoryModalContentProps) => {
   return (
     <React.Fragment>
       <header className="modal--header">
@@ -136,10 +167,11 @@ const StoryModalContent = ({ handleClose }: { handleClose: () => void }) => {
                 Continue
               </button>
             )}
+            {...rest}
           >
             {handleClose => (
               <div>
-                <p>I'm a nested modal</p>
+                <p>I&apos;m a nested modal</p>
                 <button onClick={handleClose}>Close</button>
               </div>
             )}
@@ -147,7 +179,11 @@ const StoryModalContent = ({ handleClose }: { handleClose: () => void }) => {
           <button onClick={handleClose}>Close</button>
         </div>
 
-        <a href="https://github.com/Meemaw/react-micro-modal/" target="_blank">
+        <a
+          href="https://github.com/Meemaw/react-micro-modal/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <i className="fab fa-github" />
         </a>
       </footer>

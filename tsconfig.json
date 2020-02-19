@@ -20,7 +20,8 @@
     "strictNullChecks": true,
     "stripInternal": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "es5"
+    "target": "es5",
+    "skipLibCheck": true
   },
   "include": ["src", "@types"],
   "exclude": ["node_modules", "dist"]
