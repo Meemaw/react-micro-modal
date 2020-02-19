@@ -1,7 +1,6 @@
 language: node_js
 
 node_js:
-  - '10'
   - '12'
 
 env:
@@ -20,7 +19,7 @@ jobs:
   include:
     - stage: deploy
       if: branch == master && !fork
-      node_js: '10.16.0'
+      node_js: '10.18.0'
       script:
         - yarn build
         - npx semantic-release

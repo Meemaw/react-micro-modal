@@ -63,8 +63,11 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    if (this.props.openInitially && !this.props.disableFirstElementFocus) {
-      this.focusFirstNode();
+    if (this.props.openInitially) {
+      this.addEventListeners();
+      if (!this.props.disableFirstElementFocus) {
+        this.focusFirstNode();
+      }
     }
   }
 
@@ -133,7 +136,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     if (this.isControlled) {
       if (this.props.handleClose) {
         this.props.handleClose();
-      } else {
+      } else if (process.env.NODE_ENV !== 'production') {
         console.warn('[React-micro-modal]: cannot close modal - handleClose prop is not passed.');
       }
     } else if (this.props.closeOnAnimationEnd) {
@@ -219,9 +222,6 @@ class MicroModal extends React.PureComponent<Props, State> {
       ? `modal-overlay ${customModalOverlayClassName}`
       : 'modal-overlay';
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { zIndex, ...restOverlayStyle } = overlayStyle;
-
     return (
       <ModalPortal parentSelector={parentSelector} id={this.props.id}>
         <div
@@ -236,7 +236,7 @@ class MicroModal extends React.PureComponent<Props, State> {
             className={baseModalOverlayClassName}
             style={{
               ...OVERLAY_BASE_STYLE,
-              ...restOverlayStyle,
+              ...overlayStyle,
             }}
           >
             <div
