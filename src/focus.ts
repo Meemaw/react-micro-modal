@@ -14,15 +14,21 @@ const FOCUSABLE_SELETORS = [
   '[tabindex]:not([tabindex^="-"])',
 ] as const;
 
-export const getFocusableNodes = (ref: RefObject<HTMLDivElement>): HTMLElement[] => {
+export const getFocusableNodes = (
+  ref: RefObject<HTMLDivElement>
+): HTMLElement[] => {
   return !ref.current
     ? []
     : Object.values(
-        ref.current.querySelectorAll<HTMLElement>((FOCUSABLE_SELETORS as unknown) as string),
+        ref.current.querySelectorAll<HTMLElement>(
+          (FOCUSABLE_SELETORS as unknown) as string
+        )
       );
 };
 
-export const focusFirstNode = (ref: RefObject<HTMLDivElement>): HTMLElement | undefined => {
+export const focusFirstNode = (
+  ref: RefObject<HTMLDivElement>
+): HTMLElement | undefined => {
   const focusableNodes = getFocusableNodes(ref);
   let focusedElement: HTMLElement | undefined;
   if (focusableNodes.length) {
@@ -34,7 +40,7 @@ export const focusFirstNode = (ref: RefObject<HTMLDivElement>): HTMLElement | un
 
 export const handleTabPress = (
   ref: RefObject<HTMLDivElement>,
-  event: KeyboardEvent,
+  event: KeyboardEvent
 ): HTMLElement | undefined => {
   const focusableNodes = getFocusableNodes(ref);
   if (!focusableNodes.length) {
@@ -47,7 +53,9 @@ export const handleTabPress = (
     focusedElement.focus();
     event.preventDefault();
   } else {
-    const focusedItemIndex = focusableNodes.indexOf(document.activeElement as HTMLElement);
+    const focusedItemIndex = focusableNodes.indexOf(
+      document.activeElement as HTMLElement
+    );
     if (event.shiftKey && focusedItemIndex === 0) {
       focusableNodes[focusableNodes.length - 1].focus();
       event.preventDefault();

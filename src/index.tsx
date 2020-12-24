@@ -66,7 +66,7 @@ class MicroModal extends React.PureComponent<Props, State> {
     if (this.props.openInitially) {
       this.addEventListeners();
       if (!this.props.disableFirstElementFocus) {
-        this.focusFirstNode();
+        setTimeout(() => this.focusFirstNode(), 0);
       }
     }
   }
@@ -84,7 +84,10 @@ class MicroModal extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if ((this.isControlled && prevProps.open !== this.state.open) || this.state.isClosing) {
+    if (
+      (this.isControlled && prevProps.open !== this.state.open) ||
+      this.state.isClosing
+    ) {
       if (this.state.isClosing) {
         if (this.props.closeOnAnimationEnd) {
           this.closeOnAnimationEnd(this._handleCloseAnimationEnd);
@@ -137,7 +140,9 @@ class MicroModal extends React.PureComponent<Props, State> {
       if (this.props.handleClose) {
         this.props.handleClose();
       } else if (process.env.NODE_ENV !== 'production') {
-        console.warn('[React-micro-modal]: cannot close modal - handleClose prop is not passed.');
+        console.warn(
+          '[React-micro-modal]: cannot close modal - handleClose prop is not passed.'
+        );
       }
     } else if (this.props.closeOnAnimationEnd) {
       this.startClosingUncontrolled();
@@ -203,10 +208,12 @@ class MicroModal extends React.PureComponent<Props, State> {
     isClosing: boolean,
     renderChildren: (handleClose: () => void) => React.ReactNode,
     overlayStyle: React.CSSProperties,
-    parentSelector: (() => HTMLElement) | undefined,
+    parentSelector: (() => HTMLElement) | undefined
   ): React.ReactNode => {
     const ariaHidden = open && !isClosing ? 'false' : 'true';
-    const baseModalClassName = open ? `modal modal-slide is-open` : `modal modal-slide`;
+    const baseModalClassName = open
+      ? `modal modal-slide is-open`
+      : `modal modal-slide`;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const customModalClassName = this.props.modalClassName!.trim();
@@ -256,7 +263,12 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { trigger, children, modalOverlayStyles, parentSelector } = this.props;
+    const {
+      trigger,
+      children,
+      modalOverlayStyles,
+      parentSelector,
+    } = this.props;
     const { open, isClosing } = this.state;
 
     return (
@@ -267,7 +279,7 @@ class MicroModal extends React.PureComponent<Props, State> {
           children,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           modalOverlayStyles!,
-          parentSelector,
+          parentSelector
         )}
         {trigger !== undefined && trigger(this.handleOpen)}
       </React.Fragment>
