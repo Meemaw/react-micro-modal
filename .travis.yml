@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - '12'
+  - '14'
 
 env:
   - NODE_ENV=TEST
@@ -19,7 +19,7 @@ jobs:
   include:
     - stage: deploy
       if: branch == master && !fork
-      node_js: '10.18.0'
+      node_js: '14'
       script:
         - yarn build
         - npx semantic-release
