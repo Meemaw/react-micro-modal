@@ -30,7 +30,10 @@ export default {
     },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
+  external: [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ],
   plugins: [
     // Allow json resolution
     json(),
@@ -46,7 +49,6 @@ export default {
     // Resolve source maps to the original source
     sourceMaps(),
     terser({
-      sourcemap: true,
       output: { comments: false },
       compress: {
         pure_getters: true,

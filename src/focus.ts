@@ -32,7 +32,7 @@ export const focusFirstNode = (
   const focusableNodes = getFocusableNodes(ref);
   let focusedElement: HTMLElement | undefined;
   if (focusableNodes.length) {
-    focusedElement = focusableNodes[0];
+    [focusedElement] = focusableNodes;
     focusedElement.focus();
   }
   return focusedElement;
