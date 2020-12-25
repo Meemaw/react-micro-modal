@@ -15,7 +15,7 @@ const UncontrolledTestModal = ({
   closeOnAnimationEnd = false,
   openInitially = false,
   open,
-  disableFirstElementFocus = false
+  disableFirstElementFocus = false,
 }: BaseProps) => {
   return (
     <Modal
@@ -27,11 +27,11 @@ const UncontrolledTestModal = ({
       openInitially={openInitially}
       open={open}
       disableFirstElementFocus={disableFirstElementFocus}
-      trigger={handleOpen => (
+      trigger={(handleOpen) => (
         <button onClick={handleOpen}>{openModalTriggerText}</button>
       )}
     >
-      {handleClose => <TestModalContent handleClose={handleClose} />}
+      {(handleClose) => <TestModalContent handleClose={handleClose} />}
     </Modal>
   );
 };
@@ -43,7 +43,7 @@ const ControlledTestModal = ({
   modalClassName = '',
   modalOverlayClassName = '',
   closeOnAnimationEnd = false,
-  disableFirstElementFocus = false
+  disableFirstElementFocus = false,
 }: BaseProps) => {
   const [open, setOpen] = useState(openInitially);
   return (
@@ -60,7 +60,7 @@ const ControlledTestModal = ({
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {handleClose => <TestModalContent handleClose={handleClose} />}
+        {(handleClose) => <TestModalContent handleClose={handleClose} />}
       </Modal>
     </div>
   );

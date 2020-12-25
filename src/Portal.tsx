@@ -10,10 +10,12 @@ interface Props extends PortalBaseProps {
   children: React.ReactNode;
 }
 
+// eslint-disable-next-line import/no-mutable-exports
 export let portalIndex = 1;
 
 function portalNode(id?: string): HTMLDivElement {
   const el = document.createElement('div');
+  // eslint-disable-next-line no-plusplus
   el.className = id ? `${id}-portal` : `micro-modal-portal-${portalIndex++}`;
   return el;
 }
