@@ -30,7 +30,14 @@ jobs:
           yarn install --frozen-lockfile
           yarn lint
           yarn test --coverage
+          yarn build
       - name: Upload coverage to Codecov
+        if: always()
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Release
+        if: github.ref == 'refs/heads/master'
+        run: |
+          yarn build
+          npx semantic-release
