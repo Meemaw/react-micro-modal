@@ -1,6 +1,6 @@
 # react-micro-modal
 
-[![npm](https://img.shields.io/npm/v/react-micro-modal.svg)](https://www.npmjs.com/package/react-micro-modal) [![](https://badgen.net/bundlephobia/minzip/react-micro-modal)](https://bundlephobia.com/result?p=react-micro-modal) [![Build Status](https://travis-ci.org/Meemaw/react-micro-modal.svg?branch=master)](https://travis-ci.org/Meemaw/react-micro-modal) [![Coverage Status](https://coveralls.io/repos/github/Meemaw/react-micro-modal/badge.svg?branch=master)](https://coveralls.io/github/Meemaw/react-micro-modal?branch=master) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![npm](https://img.shields.io/npm/v/react-micro-modal.svg)](https://www.npmjs.com/package/react-micro-modal) [![](https://badgen.net/bundlephobia/minzip/react-micro-modal)](https://bundlephobia.com/result?p=react-micro-modal) ![CI](https://github.com/Meemaw/react-micro-modal/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/Meemaw/react-micro-modal/branch/master/graph/badge.svg?token=xdrppK2PPf)](https://codecov.io/gh/Meemaw/react-micro-modal) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 _Accessible, lightweight and configurable modal component with a11y-enabled inspired by [Micromodal.js](https://github.com/Ghosh/micromodal)._
 
@@ -36,8 +36,8 @@ import MicroModal from 'react-micro-modal';
 const App = () => {
   return (
     <MicroModal
-      trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}
-      children={handleClose => <button onClick={handleClose}>Close!</button>}
+      trigger={(handleOpen) => <div onClick={handleOpen}>Open!</div>}
+      children={(handleClose) => <button onClick={handleClose}>Close!</button>}
     />
   );
 };
