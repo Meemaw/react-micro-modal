@@ -156,7 +156,7 @@ export class MicroModal extends React.PureComponent<MicroModalProps, State> {
       } else if (process.env.NODE_ENV !== 'production') {
         // eslint-disable-next-line no-console
         console.warn(
-          '[React-micro-modal]: cannot close modal - handleClose prop is not passed.'
+          '[react-micro-modal]: cannot close modal -- handleClose prop is required in controlled mode'
         );
       }
     } else if (closeOnAnimationEnd) {

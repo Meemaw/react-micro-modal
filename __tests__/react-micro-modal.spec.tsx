@@ -16,9 +16,14 @@ import {
 } from './__helpers__/components';
 import { fireEscapeKey } from './__helpers__/events';
 
+const CONTROLLED_FIXTURE = {
+  description: 'Controlled modal',
+  ModalComponent: ControlledTestModal,
+};
+
 const MODAL_FIXTURES = [
   { description: 'Uncontrolled modal', ModalComponent: UncontrolledTestModal },
-  { description: 'Controlled modal', ModalComponent: ControlledTestModal },
+  CONTROLLED_FIXTURE,
 ];
 
 const getPortalRoots = () => {
@@ -105,6 +110,20 @@ describe('Micro modal', () => {
         'aria-hidden',
         'true'
       );
+    });
+  });
+
+  describe(CONTROLLED_FIXTURE.description, () => {
+    it('Warns user when no handleClose prop in controlled mod', () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => null);
+      render(<CONTROLLED_FIXTURE.ModalComponent handleClose={undefined} />);
+      userEvent.click(screen.getByText(openModalTriggerText));
+      fireEscapeKey(document.body);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[react-micro-modal]: cannot close modal -- handleClose prop is required in controlled mode'
+      );
+      warn.mockRestore();
     });
   });
 

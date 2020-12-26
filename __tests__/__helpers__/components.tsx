@@ -44,7 +44,7 @@ const ControlledTestModal = ({
   closeOnOverlayClick = true,
   closeOnAnimationEnd = false,
   disableFirstElementFocus = false,
-  overrides,
+  ...rest
 }: TestModalProps) => {
   const [open, setOpen] = useState(openInitially);
   return (
@@ -60,7 +60,7 @@ const ControlledTestModal = ({
         openInitially={openInitially}
         open={open}
         handleClose={() => setOpen(false)}
-        overrides={overrides}
+        {...rest}
       >
         {(handleClose) => <TestModalContent handleClose={handleClose} />}
       </Modal>
