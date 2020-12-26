@@ -82,17 +82,21 @@ button:hover {
 }
 
 .modal-slide[aria-hidden='false'] .modal-overlay.custom-animation {
-  animation: modal-fade-in 2s cubic-bezier(0, 0, 0.5, 1);
+  animation: modal-fade-in 2s cubic-bezier(0, 0, 0.5, 1) !important;
 }
 
 .modal-slide[aria-hidden='true'] .modal-overlay.custom-animation {
-  animation: modal-fade-out 2s cubic-bezier(0, 0, 0.5, 1);
+  animation: modal-fade-out 2s cubic-bezier(0, 0, 0.5, 1) !important;
 }
 
-.modal-slide[aria-hidden='false'] .modal-overlay.custom-animation > .modal-container {
-  animation: modal-slide-in 2s cubic-bezier(0, 0, 0.5, 1);
+.modal-slide[aria-hidden='false']
+  .modal-overlay.custom-animation
+  > .modal-container {
+  animation: modal-slide-in 2s cubic-bezier(0, 0, 0.5, 1) !important;
 }
 
-.modal-slide[aria-hidden='true'] .modal-overlay.custom-animation > .modal-container {
-  animation: modal-slide-out 2s cubic-bezier(0, 0, 0.5, 1);
+.modal-slide[aria-hidden='true']
+  .modal-overlay.custom-animation
+  > .modal-container {
+  animation: modal-slide-out 2s cubic-bezier(0, 0, 0.5, 1) !important;
 }

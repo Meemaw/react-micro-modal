@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
 
-import { BaseProps } from '../../src';
+import { MicroModalProps } from '../../src';
 import Modal from '../../src/react-micro-modal';
 
 export const closeModalElementText = 'Close';
 export const openModalTriggerText = 'Trigger';
 export const firstFocusableElementText = 'Anchor element';
 
+type TestModalProps = Omit<MicroModalProps, 'children'>;
+
 const UncontrolledTestModal = ({
   closeOnEscapePress = true,
   closeOnOverlayClick = true,
-  modalClassName = '',
-  modalOverlayClassName = '',
   closeOnAnimationEnd = false,
   openInitially = false,
   open,
   disableFirstElementFocus = false,
-}: BaseProps) => {
+  overrides,
+}: TestModalProps) => {
   return (
     <Modal
-      modalOverlayClassName={modalOverlayClassName}
       closeOnAnimationEnd={closeOnAnimationEnd}
-      modalClassName={modalClassName}
       closeOnEscapePress={closeOnEscapePress}
       closeOnOverlayClick={closeOnOverlayClick}
       openInitially={openInitially}
       open={open}
       disableFirstElementFocus={disableFirstElementFocus}
       trigger={(handleOpen) => (
-        <button onClick={handleOpen}>{openModalTriggerText}</button>
+        <button onClick={handleOpen} type="button">
+          {openModalTriggerText}
+        </button>
       )}
+      overrides={overrides}
     >
       {(handleClose) => <TestModalContent handleClose={handleClose} />}
     </Modal>
@@ -40,25 +42,25 @@ const ControlledTestModal = ({
   openInitially = false,
   closeOnEscapePress = true,
   closeOnOverlayClick = true,
-  modalClassName = '',
-  modalOverlayClassName = '',
   closeOnAnimationEnd = false,
   disableFirstElementFocus = false,
-}: BaseProps) => {
+  overrides,
+}: TestModalProps) => {
   const [open, setOpen] = useState(openInitially);
   return (
     <div>
-      <button onClick={() => setOpen(true)}>{openModalTriggerText}</button>
+      <button onClick={() => setOpen(true)} type="button">
+        {openModalTriggerText}
+      </button>
       <Modal
         closeOnAnimationEnd={closeOnAnimationEnd}
-        modalClassName={modalClassName}
-        modalOverlayClassName={modalOverlayClassName}
         closeOnEscapePress={closeOnEscapePress}
         disableFirstElementFocus={disableFirstElementFocus}
         closeOnOverlayClick={closeOnOverlayClick}
         openInitially={openInitially}
         open={open}
         handleClose={() => setOpen(false)}
+        overrides={overrides}
       >
         {(handleClose) => <TestModalContent handleClose={handleClose} />}
       </Modal>
@@ -73,7 +75,9 @@ const TestModalContent = ({ handleClose }: { handleClose: () => void }) => (
       {firstFocusableElementText}
     </a>
     <input placeholder="Write text..." />
-    <button onClick={handleClose}>{closeModalElementText}</button>
+    <button onClick={handleClose} type="button">
+      {closeModalElementText}
+    </button>
   </div>
 );
 

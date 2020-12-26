@@ -2,41 +2,48 @@
 import React from 'react';
 
 import { focusFirstNode, handleTabPress } from './focus';
-import ModalPortal, { PortalBaseProps } from './Portal';
-import { CONTAINER_BASE_STYLE, OVERLAY_BASE_STYLE } from './styles';
+import { ModalPortal, ModalPortalProps } from './Portal';
+import { DIALOG_BASE_STYLE, OVERLAY_BASE_STYLE } from './styles';
 
 type State = {
   isClosing: boolean;
   open: boolean;
 };
 
-function getInitialState(props: Props): State {
+export type MicroModalProps = Pick<ModalPortalProps, 'parent'> & {
+  children: (handleClose: () => void) => React.ReactNode;
+  trigger?: (handleOpen: () => void) => React.ReactNode;
+
+  handleClose?: () => void;
+  open?: boolean;
+
+  openInitially?: boolean;
+  closeOnAnimationEnd?: boolean;
+  disableFirstElementFocus?: boolean;
+  closeOnOverlayClick?: boolean;
+  closeOnEscapePress?: boolean;
+
+  overrides?: {
+    Root?: React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    >;
+    Overlay?: React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    >;
+    Dialog?: React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    >;
+  };
+};
+
+function getInitialState(props: MicroModalProps): State {
   return {
     isClosing: false,
     open: props.openInitially || false,
   };
-}
-
-type OptionalProps = {
-  closeOnEscapePress?: boolean;
-  closeOnOverlayClick?: boolean;
-  modalOverlayStyles?: React.CSSProperties;
-  containerStyles?: React.CSSProperties;
-  disableFirstElementFocus?: boolean;
-  closeOnAnimationEnd?: boolean;
-  modalClassName?: string;
-  modalOverlayClassName?: string;
-  openInitially?: boolean;
-};
-
-export interface BaseProps extends PortalBaseProps, OptionalProps {
-  trigger?: (handleOpen: () => void) => React.ReactNode;
-  open?: boolean;
-  handleClose?: () => void;
-}
-
-interface Props extends BaseProps {
-  children: (handleClose: () => void) => React.ReactNode;
 }
 
 const ESCAPE_KEY = 'Escape' as const;
@@ -48,21 +55,18 @@ function getLastOpenContainer(): React.RefObject<HTMLDivElement> {
   return openContainerRefStack[openContainerRefStack.length - 1];
 }
 
-class MicroModal extends React.PureComponent<Props, State> {
+export class MicroModal extends React.PureComponent<MicroModalProps, State> {
   // eslint-disable-next-line react/state-in-constructor
   readonly state: State = getInitialState(this.props);
 
   // eslint-disable-next-line react/static-property-placement
-  static defaultProps: OptionalProps = {
+  static defaultProps: MicroModalProps = {
     disableFirstElementFocus: false,
-    modalOverlayStyles: {},
-    containerStyles: {},
     closeOnEscapePress: true,
     closeOnOverlayClick: true,
     closeOnAnimationEnd: false,
-    modalOverlayClassName: '',
-    modalClassName: '',
     openInitially: false,
+    children: () => null,
   };
 
   // eslint-disable-next-line react/destructuring-assignment
@@ -84,14 +88,14 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   }
 
-  static getDerivedStateFromProps(props: Props, state: State) {
+  static getDerivedStateFromProps(props: MicroModalProps, state: State) {
     if (props.open !== undefined && props.open !== state.open) {
       return { open: true, isClosing: !props.open };
     }
     return null;
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: MicroModalProps) {
     const { closeOnAnimationEnd } = this.props;
     const { open, isClosing } = this.state;
     if ((this.isControlled && prevProps.open !== open) || isClosing) {
@@ -209,6 +213,14 @@ class MicroModal extends React.PureComponent<Props, State> {
     }
   };
 
+  private getOverlayAnimationName = (ariaHidden: 'false' | 'true') => {
+    return ariaHidden === 'false' ? 'modal-fade-in' : 'modal-fade-out';
+  };
+
+  private getDialogAnimationName = (ariaHidden: 'false' | 'true') => {
+    return ariaHidden === 'false' ? 'modal-slide-in' : 'modal-slide-out';
+  };
+
   private focusFirstNode() {
     const { disableFirstElementFocus } = this.props;
     if (disableFirstElementFocus) {
@@ -218,65 +230,57 @@ class MicroModal extends React.PureComponent<Props, State> {
     focusFirstNode(this.containerRef);
   }
 
-  private renderContent = (
-    open: boolean,
-    isClosing: boolean,
-    renderChildren: (handleClose: () => void) => React.ReactNode,
-    overlayStyle: React.CSSProperties,
-    parentSelector: (() => HTMLElement) | undefined
-  ): React.ReactNode => {
+  private renderContent = (): React.ReactNode => {
+    const { open, isClosing } = this.state;
     const ariaHidden = open && !isClosing ? 'false' : 'true';
-    const baseModalClassName = open
-      ? `modal modal-slide is-open`
-      : `modal modal-slide`;
 
     const {
-      modalClassName,
-      modalOverlayClassName,
-      id,
-      containerStyles,
+      parent,
+      children,
+      overrides: {
+        Root: { style: rootStyleOverrides, ...rootOverrides } = { style: {} },
+        Overlay: { style: overlayStyleOverrides, ...overlayOverrides } = {
+          style: {},
+          className: '',
+        },
+        Dialog: { style: dialogStyleOverrides, ...dialogOverrides } = {
+          style: {},
+        },
+      } = {},
     } = this.props;
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const customModalClassName = modalClassName!.trim();
-
-    const actualModalClassName = customModalClassName
-      ? `${baseModalClassName} ${customModalClassName}`
-      : baseModalClassName;
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const customModalOverlayClassName = modalOverlayClassName!.trim();
-
-    const baseModalOverlayClassName = modalOverlayClassName
-      ? `modal-overlay ${customModalOverlayClassName}`
-      : 'modal-overlay';
-
     return (
-      <ModalPortal parentSelector={parentSelector} id={id}>
+      <ModalPortal parent={parent}>
         <div
-          className={actualModalClassName}
-          aria-hidden={ariaHidden}
           ref={this.modalRef}
-          id={id}
-          data-testid={id || 'micro-modal'}
-          style={{ display: open ? 'block' : 'none' }}
+          aria-hidden={ariaHidden}
+          style={{ display: open ? 'block' : 'none', ...rootStyleOverrides }}
+          {...rootOverrides}
         >
           <div
-            className={baseModalOverlayClassName}
             style={{
               ...OVERLAY_BASE_STYLE,
-              ...overlayStyle,
+              animation: `${this.getOverlayAnimationName(
+                ariaHidden
+              )} 0.3s cubic-bezier(0, 0, 0.2, 1)`,
+              ...overlayStyleOverrides,
             }}
+            {...overlayOverrides}
           >
             <div
-              className="modal-container"
-              style={{ ...CONTAINER_BASE_STYLE, ...containerStyles }}
+              ref={this.containerRef}
               role="dialog"
               aria-modal="true"
-              ref={this.containerRef}
-              data-testid="micro-modal__container"
+              style={{
+                ...DIALOG_BASE_STYLE,
+                animation: `${this.getDialogAnimationName(
+                  ariaHidden
+                )} 0.3s cubic-bezier(0, 0, 0.2, 1)`,
+                ...dialogStyleOverrides,
+              }}
+              {...dialogOverrides}
             >
-              {open ? renderChildren(this.handleClose) : null}
+              {open ? children(this.handleClose) : null}
             </div>
           </div>
         </div>
@@ -285,28 +289,12 @@ class MicroModal extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      trigger,
-      children,
-      modalOverlayStyles,
-      parentSelector,
-    } = this.props;
-    const { open, isClosing } = this.state;
-
+    const { trigger } = this.props;
     return (
       <>
-        {this.renderContent(
-          open,
-          isClosing,
-          children,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          modalOverlayStyles!,
-          parentSelector
-        )}
+        {this.renderContent()}
         {trigger !== undefined && trigger(this.handleOpen)}
       </>
     );
   }
 }
-
-export default MicroModal;

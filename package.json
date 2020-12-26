@@ -53,6 +53,9 @@
       "\\.(ts|tsx)$": "ts-jest",
       ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
     },
+    "setupFilesAfterEnv": [
+      "<rootDir>/__tests__/setup.ts"
+    ],
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "testRegex": "(/__tests__/.*|\\.)\\.(test|spec)\\.(ts|tsx|js)$",
     "moduleFileExtensions": [

@@ -1,5 +1,8 @@
 import { CSSProperties } from 'react';
 
+const BASE_CLASS_NAME = 'react-micro-modal';
+export const PORTAL_CLASS_NAME = `${BASE_CLASS_NAME}--portal`;
+
 export const OVERLAY_BASE_STYLE: CSSProperties = {
   position: 'fixed',
   top: 0,
@@ -12,7 +15,7 @@ export const OVERLAY_BASE_STYLE: CSSProperties = {
   alignItems: 'center',
 };
 
-export const CONTAINER_BASE_STYLE: CSSProperties = {
+export const DIALOG_BASE_STYLE: CSSProperties = {
   backgroundColor: '#fff',
   padding: '30px',
   maxWidth: '500px',

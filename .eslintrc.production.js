@@ -28,6 +28,7 @@ module.exports = {
   },
   rules: {
     'arrow-body-style': ['off'],
+    'react/jsx-props-no-spreading': ['off'],
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'no-use-before-define': ['off'],
 
