@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { MicroModalProps } from '../../src';
-import Modal from '../../src/react-micro-modal';
+import Modal, { MicroModalProps } from '../../src';
 
 export const closeModalElementText = 'Close';
 export const openModalTriggerText = 'Trigger';

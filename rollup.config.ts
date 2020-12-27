@@ -6,16 +6,21 @@ import camelCase from 'lodash.camelcase';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require('./package.json');
 
-const libraryName = 'react-micro-modal';
+export const getNamgeFromPkg = () => {
+  const split = pkg.name.split('/');
+  const filename = split[split.length - 1];
+  return filename.split('.')[0];
+};
 
 export default {
-  input: `src/${libraryName}.ts`,
+  input: pkg.source,
   output: [
     {
       file: pkg.main,
-      name: camelCase(libraryName),
+      name: camelCase(getNamgeFromPkg()),
       format: 'umd',
       sourcemap: true,
       globals: {

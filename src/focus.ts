@@ -1,5 +1,3 @@
-import { RefObject } from 'react';
-
 const FOCUSABLE_SELETORS = [
   'a[href]',
   'area[href]',
@@ -14,22 +12,18 @@ const FOCUSABLE_SELETORS = [
   '[tabindex]:not([tabindex^="-"])',
 ] as const;
 
-export const getFocusableNodes = (
-  ref: RefObject<HTMLDivElement>
-): HTMLElement[] => {
-  return !ref.current
-    ? []
-    : Object.values(
-        ref.current.querySelectorAll<HTMLElement>(
-          (FOCUSABLE_SELETORS as unknown) as string
-        )
-      );
+export const getFocusableNodes = (element: HTMLElement): HTMLElement[] => {
+  return Object.values(
+    element.querySelectorAll<HTMLElement>(
+      (FOCUSABLE_SELETORS as unknown) as string
+    )
+  );
 };
 
 export const focusFirstNode = (
-  ref: RefObject<HTMLDivElement>
+  element: HTMLElement
 ): HTMLElement | undefined => {
-  const focusableNodes = getFocusableNodes(ref);
+  const focusableNodes = getFocusableNodes(element);
   let focusedElement: HTMLElement | undefined;
   if (focusableNodes.length) {
     [focusedElement] = focusableNodes;
@@ -39,17 +33,17 @@ export const focusFirstNode = (
 };
 
 export const handleTabPress = (
-  ref: RefObject<HTMLDivElement>,
+  element: HTMLElement,
   event: KeyboardEvent
 ): HTMLElement | undefined => {
-  const focusableNodes = getFocusableNodes(ref);
+  const focusableNodes = getFocusableNodes(element);
   if (!focusableNodes.length) {
     return undefined;
   }
 
   const focusedElement = focusableNodes[0];
 
-  if (ref.current && !ref.current.contains(document.activeElement)) {
+  if (!element.contains(document.activeElement)) {
     focusedElement.focus();
     event.preventDefault();
   } else {

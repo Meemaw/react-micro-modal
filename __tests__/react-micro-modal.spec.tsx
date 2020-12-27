@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 
-import Modal from '../src/react-micro-modal';
+import Modal from '../src';
 import { PORTAL_CLASS_NAME } from '../src/styles';
 
 import {
@@ -114,7 +114,7 @@ describe('Micro modal', () => {
   });
 
   describe(CONTROLLED_FIXTURE.description, () => {
-    it('Warns user when no handleClose prop in controlled mod', () => {
+    it('Warns user when no handleClose prop in controlled mode', () => {
       const warn = jest.spyOn(console, 'warn').mockImplementation(() => null);
       render(<CONTROLLED_FIXTURE.ModalComponent handleClose={undefined} />);
       userEvent.click(screen.getByText(openModalTriggerText));

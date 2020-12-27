@@ -3,7 +3,7 @@ import './index.css';
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
 
-import { MicroModal, MicroModalProps } from '../src';
+import MicroModal, { MicroModalProps } from '../src';
 
 export default {
   title: 'Uncontrolled Micro Modal',
@@ -130,7 +130,10 @@ export const AsToast = () => {
         type="button"
         onClick={() => {
           setOpen(true);
-          setTimeout(() => setOpen(false), 2000);
+          setTimeout(() => {
+            console.log('CLOSE');
+            setOpen(false);
+          }, 2000);
         }}
       >
         Show toast!
