@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Modal, { MicroModalProps } from '../../src';
+import MicroModal, { MicroModalProps } from '../../index';
 
 export const closeModalElementText = 'Close';
 export const openModalTriggerText = 'Trigger';
@@ -18,7 +18,7 @@ const UncontrolledTestModal = ({
   overrides,
 }: TestModalProps) => {
   return (
-    <Modal
+    <MicroModal
       closeOnAnimationEnd={closeOnAnimationEnd}
       closeOnEscapePress={closeOnEscapePress}
       closeOnOverlayClick={closeOnOverlayClick}
@@ -33,7 +33,7 @@ const UncontrolledTestModal = ({
       overrides={overrides}
     >
       {(handleClose) => <TestModalContent handleClose={handleClose} />}
-    </Modal>
+    </MicroModal>
   );
 };
 
@@ -51,7 +51,7 @@ const ControlledTestModal = ({
       <button onClick={() => setOpen(true)} type="button">
         {openModalTriggerText}
       </button>
-      <Modal
+      <MicroModal
         closeOnAnimationEnd={closeOnAnimationEnd}
         closeOnEscapePress={closeOnEscapePress}
         disableFirstElementFocus={disableFirstElementFocus}
@@ -62,7 +62,7 @@ const ControlledTestModal = ({
         {...rest}
       >
         {(handleClose) => <TestModalContent handleClose={handleClose} />}
-      </Modal>
+      </MicroModal>
     </div>
   );
 };

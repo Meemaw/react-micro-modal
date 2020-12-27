@@ -4,8 +4,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 
-import Modal from '../src';
-import { PORTAL_CLASS_NAME } from '../src/styles';
+import MicroModal from '../index';
+import { PORTAL_CLASS_NAME } from '../styles';
 
 import {
   UncontrolledTestModal,
@@ -38,7 +38,7 @@ describe('Micro modal', () => {
   describe('Nested modal', () => {
     it('Should open and close nested modals on triggers', () => {
       render(
-        <Modal
+        <MicroModal
           trigger={(handleOpen) => (
             <button type="button" onClick={handleOpen}>
               Open modal
@@ -46,7 +46,7 @@ describe('Micro modal', () => {
           )}
         >
           {(handleClose) => (
-            <Modal
+            <MicroModal
               trigger={(handleOpen) => (
                 <div>
                   <button onClick={handleOpen} type="button">
@@ -63,9 +63,9 @@ describe('Micro modal', () => {
                   Close nested modal
                 </button>
               )}
-            </Modal>
+            </MicroModal>
           )}
-        </Modal>
+        </MicroModal>
       );
 
       expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(

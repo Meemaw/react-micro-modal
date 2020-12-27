@@ -33,53 +33,25 @@
     "node": ">=10.22.0"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && cp src/index.css dist",
     "start": "yarn storybook",
     "test": "jest",
+    "prebuild": "rimraf dist",
+    "build": "concurrently \"yarn build:rollup\" \"yarn build:types\" && yarn copy:css",
+    "build:types": "tsc --p tsconfig.build.json --declaration --outDir dist --emitDeclarationOnly",
+    "build:rollup": "rollup -c rollup.config.js",
+    "copy:css": "cp src/index.css dist",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "storybook": "start-storybook",
     "lint": "concurrently \"npm run prettier\" \"npm run eslint\"",
     "eslint": "eslint --max-warnings 0 --ext .ts 'src/**/*'",
-    "prettier": "prettier --config .prettierrc -l 'src/**/*.{ts,tsx}*' '__tests__/**/*.{ts,tsx}*' || (echo \nThese files are not formatted correctly && false)",
-    "prettier:fix": "prettier --config .prettierrc -l 'src/**/*.{ts,tsx}*' '__tests__/**/*.{ts,tsx}*' --write"
+    "prettier": "prettier -l 'src/**/*'",
+    "prettier:fix": "prettier -l 'src/**/*' --write"
   },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
-  },
-  "jest": {
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest",
-      ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/__tests__/setup.ts"
-    ],
-    "testEnvironment": "jest-environment-jsdom-sixteen",
-    "testRegex": "(/__tests__/.*|\\.)\\.(test|spec)\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/__tests__/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
-      }
-    },
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
-    ]
   },
   "commitlint": {
     "extends": [
@@ -101,10 +73,13 @@
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@testing-library/user-event": "12.6.0",
+    "@types/fs-extra": "^9.0.6",
     "@types/jest": "26.0.19",
+    "@types/lodash": "^4.14.166",
     "@types/node": "14.14.16",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
+    "@types/rollup-plugin-peer-deps-external": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "4.11.0",
     "@typescript-eslint/parser": "4.11.0",
     "babel-loader": "8.2.2",
