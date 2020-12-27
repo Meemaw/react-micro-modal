@@ -1,8 +1,12 @@
+/* eslint-disable jest/valid-title */
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 
-import Modal from '../src/react-micro-modal';
+import Modal from '../src';
+import { PORTAL_CLASS_NAME } from '../src/styles';
+
 import {
   UncontrolledTestModal,
   ControlledTestModal,
@@ -12,136 +16,154 @@ import {
 } from './__helpers__/components';
 import { fireEscapeKey } from './__helpers__/events';
 
+const CONTROLLED_FIXTURE = {
+  description: 'Controlled modal',
+  ModalComponent: ControlledTestModal,
+};
+
 const MODAL_FIXTURES = [
   { description: 'Uncontrolled modal', ModalComponent: UncontrolledTestModal },
-  { description: 'Controlled modal', ModalComponent: ControlledTestModal },
+  CONTROLLED_FIXTURE,
 ];
 
-const closeModal = () => {
-  userEvent.click(screen.getByText(closeModalElementText));
+const getPortalRoots = () => {
+  return document.body.querySelectorAll(`div.${PORTAL_CLASS_NAME}`);
 };
 
-const openModal = () => {
-  userEvent.click(screen.getByText(openModalTriggerText));
-};
-
-const expectModalIsOpen = (modal: HTMLElement) => {
-  expect(modal.className).toBe('modal modal-slide is-open');
-  expect(modal.getAttribute('aria-hidden')).toBe('false');
-};
-
-const expectModalIsClosed = (modal: HTMLElement) => {
-  expect(modal.className).toBe('modal modal-slide');
-  expect(modal.getAttribute('aria-hidden')).toBe('true');
+const portalOverlay = (portalRoot: Element) => {
+  return portalRoot.querySelector('div > div');
 };
 
 describe('Micro modal', () => {
   describe('Nested modal', () => {
     it('Should open and close nested modals on triggers', () => {
-      const { getByTestId, getByText } = render(
+      render(
         <Modal
-          trigger={(handleOpen) => <div onClick={handleOpen}>Open modal</div>}
+          trigger={(handleOpen) => (
+            <button type="button" onClick={handleOpen}>
+              Open modal
+            </button>
+          )}
         >
           {(handleClose) => (
             <Modal
-              id="nested-micro-modal"
               trigger={(handleOpen) => (
                 <div>
-                  <div onClick={handleOpen}>Open nested modal</div>
-                  <div onClick={handleClose}>Close modal</div>
+                  <button onClick={handleOpen} type="button">
+                    Open nested modal
+                  </button>
+                  <button onClick={handleClose} type="button">
+                    Close modal
+                  </button>
                 </div>
               )}
             >
-              {(handleClose) => (
-                <div onClick={handleClose}>Close nested modal</div>
+              {(nestedModalHandleClose) => (
+                <button onClick={nestedModalHandleClose} type="button">
+                  Close nested modal
+                </button>
               )}
             </Modal>
           )}
         </Modal>
       );
-      const modalWrapper = getByTestId('micro-modal');
 
-      expectModalIsClosed(modalWrapper);
-      userEvent.click(getByText('Open modal'));
+      expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
 
-      expect(
-        document.body.querySelector('.nested-micro-modal-portal')
-      ).toBeTruthy();
+      userEvent.click(screen.getByText('Open modal'));
 
-      const nestedModalWrapper = getByTestId('nested-micro-modal');
-      expectModalIsOpen(modalWrapper);
-      expectModalIsClosed(nestedModalWrapper);
+      expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'false'
+      );
 
-      userEvent.click(getByText('Open nested modal'));
-      expectModalIsOpen(modalWrapper);
-      expectModalIsOpen(nestedModalWrapper);
+      expect(getPortalRoots()[1].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
 
-      userEvent.click(getByText('Close nested modal'));
-      expectModalIsOpen(modalWrapper);
-      expectModalIsClosed(nestedModalWrapper);
+      userEvent.click(screen.getByText('Open nested modal'));
 
-      userEvent.click(getByText('Close modal'));
-      expectModalIsClosed(modalWrapper);
-      expectModalIsClosed(nestedModalWrapper);
+      expect(getPortalRoots()[1].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'false'
+      );
 
-      // we clean nested modal after ourselves
-      expect(
-        document.body.querySelector('.nested-micro-modal-portal')
-      ).toBeNull();
+      userEvent.click(screen.getByText('Close nested modal'));
+
+      expect(getPortalRoots()[1].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+      expect(screen.queryByText('Cloes nested modal')).toBeNull();
+      userEvent.click(screen.getByText('Close modal'));
+
+      expect(getPortalRoots()[1]).toBeUndefined();
+
+      expect(screen.queryByText('Close modal')).toBeNull();
+
+      expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
+    });
+  });
+
+  describe(CONTROLLED_FIXTURE.description, () => {
+    it('Warns user when no handleClose prop in controlled mode', () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => null);
+      render(<CONTROLLED_FIXTURE.ModalComponent handleClose={undefined} />);
+      userEvent.click(screen.getByText(openModalTriggerText));
+      fireEscapeKey(document.body);
+
+      expect(warn).toHaveBeenCalledWith(
+        '[react-micro-modal]: cannot close modal -- handleClose prop is required in controlled mode'
+      );
+      warn.mockRestore();
     });
   });
 
   MODAL_FIXTURES.forEach(({ description, ModalComponent }) => {
     describe(description, () => {
-      it('Should apply correct classnames and attributes on modal toggle', () => {
-        render(<ModalComponent />);
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsClosed(modalWrapper);
-        openModal();
-        expectModalIsOpen(modalWrapper);
-        closeModal();
-        expectModalIsClosed(modalWrapper);
-      });
-
       it('Open modal should close on escape key press', () => {
         render(<ModalComponent />);
-        openModal();
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsOpen(modalWrapper);
-        fireEscapeKey(modalWrapper);
-        expectModalIsClosed(modalWrapper);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+        fireEscapeKey(document.body);
+        expect(screen.queryByText('Modal content')).not.toBeInTheDocument();
       });
 
-      it('Open modal should close on document click', () => {
+      it('Open modal should close on overlay click', () => {
         render(<ModalComponent />);
-        openModal();
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsOpen(modalWrapper);
-        userEvent.click(modalWrapper);
-        expectModalIsClosed(modalWrapper);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+        userEvent.click(portalOverlay(getPortalRoots()[0]) as HTMLDivElement);
+        expect(screen.queryByText('Modal content')).not.toBeInTheDocument();
       });
 
       it('Open modal should not close on escape key press', () => {
         render(<ModalComponent closeOnEscapePress={false} />);
-        openModal();
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsOpen(modalWrapper);
-        fireEscapeKey(modalWrapper);
-        expectModalIsOpen(modalWrapper);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+        fireEscapeKey(document.body);
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
       });
 
-      it('Open modal should not close on document click', () => {
+      it('Open modal should not close on overlay click', () => {
         render(<ModalComponent closeOnOverlayClick={false} />);
-        openModal();
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsOpen(modalWrapper);
-        userEvent.click(document.body);
-        expectModalIsOpen(modalWrapper);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+        userEvent.click(portalOverlay(getPortalRoots()[0]) as HTMLDivElement);
+        expect(screen.queryByText('Modal content')).toBeInTheDocument();
       });
 
       it('Should focus first focusable element on open', () => {
         render(<ModalComponent />);
-        openModal();
+        userEvent.click(screen.getByText(openModalTriggerText));
         expect(screen.getByText(firstFocusableElementText)).toBe(
           document.activeElement
         );
@@ -149,7 +171,7 @@ describe('Micro modal', () => {
 
       it('Should focus previous element on shift+tab click', () => {
         render(<ModalComponent />);
-        openModal();
+        userEvent.click(screen.getByText(openModalTriggerText));
         expect(screen.getByText(firstFocusableElementText)).toBe(
           document.activeElement
         );
@@ -165,7 +187,7 @@ describe('Micro modal', () => {
 
       it('Should focus first focusable element on tab press if focus is lost', () => {
         render(<ModalComponent />);
-        openModal();
+        userEvent.click(screen.getByText(openModalTriggerText));
         expect(screen.getByText(firstFocusableElementText)).toBe(
           document.activeElement
         );
@@ -181,21 +203,38 @@ describe('Micro modal', () => {
       });
 
       it('Open modal should close after closing animation ends', () => {
-        render(<ModalComponent closeOnAnimationEnd={true} />);
-        const modalWrapper = screen.getByTestId('micro-modal');
-        openModal();
-        expectModalIsOpen(modalWrapper);
-        closeModal();
-        expect(modalWrapper.className).toBe('modal modal-slide is-open');
-        expect(modalWrapper.getAttribute('aria-hidden')).toBe('true');
-        fireEvent.animationEnd(screen.getByTestId('micro-modal__container'));
-        expectModalIsClosed(modalWrapper);
+        render(<ModalComponent closeOnAnimationEnd />);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+
+        expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+          'aria-hidden',
+          'false'
+        );
+
+        userEvent.click(screen.getByText(closeModalElementText));
+
+        expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+          'aria-hidden',
+          'true'
+        );
+
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
+
+        act(() => {
+          fireEvent.animationEnd(screen.getByRole('dialog', { hidden: true }));
+        });
+
+        expect(getPortalRoots()[0].firstElementChild).toHaveAttribute(
+          'aria-hidden',
+          'true'
+        );
+        expect(screen.queryByText('Modal content')).not.toBeInTheDocument();
       });
 
       it('Should be initially open with first element focues', async () => {
-        render(<ModalComponent openInitially={true} />);
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expectModalIsOpen(modalWrapper);
+        render(<ModalComponent openInitially />);
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
 
         await waitFor(() => {
           expect(screen.getByText(firstFocusableElementText)).toBe(
@@ -206,9 +245,8 @@ describe('Micro modal', () => {
 
       it('Should not focus first element when focus disabled', async () => {
         render(<ModalComponent disableFirstElementFocus />);
-        const modalWrapper = screen.getByTestId('micro-modal');
-        openModal();
-        expectModalIsOpen(modalWrapper);
+        userEvent.click(screen.getByText(openModalTriggerText));
+        expect(screen.getByText('Modal content')).toBeInTheDocument();
 
         await waitFor(() => {
           expect(screen.getByText(firstFocusableElementText)).not.toBe(
@@ -217,19 +255,41 @@ describe('Micro modal', () => {
         });
       });
 
-      it('Should be able to apply custom className to modal', () => {
+      it('Should be able to override element props', () => {
         render(
           <ModalComponent
-            modalClassName="custom-class"
-            modalOverlayClassName=" my-custom-animation-class and-random-more "
+            overrides={{
+              Root: {
+                className: 'root-class-name',
+                style: { zIndex: 150 },
+              },
+              Overlay: {
+                className: 'overlay-class-name',
+                style: { zIndex: 150 },
+              },
+              Dialog: {
+                className: 'dialog-class-name',
+                style: { zIndex: 150 },
+              },
+            }}
           />
         );
-        const modalWrapper = screen.getByTestId('micro-modal');
-        expect(modalWrapper.className).toBe('modal modal-slide custom-class');
-        const child = modalWrapper.firstElementChild as HTMLDivElement;
-        expect(child.className).toBe(
-          'modal-overlay my-custom-animation-class and-random-more'
+
+        const portalElement = getPortalRoots()[0];
+        const rootElement = portalElement.querySelector('div.root-class-name');
+        const overlayElement = portalElement.querySelector(
+          'div.overlay-class-name'
         );
+        const dialogElement = portalElement.querySelector(
+          'div.dialog-class-name'
+        );
+
+        expect(rootElement).toBeInTheDocument();
+        expect(rootElement).toHaveStyle({ zIndex: 150 });
+        expect(overlayElement).toBeInTheDocument();
+        expect(overlayElement).toHaveStyle({ zIndex: 150 });
+        expect(dialogElement).toBeInTheDocument();
+        expect(dialogElement).toHaveStyle({ zIndex: 150 });
       });
     });
   });

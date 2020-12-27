@@ -1,6 +1,9 @@
 import { fireEvent } from '@testing-library/react';
 
-function fireKeyDownEvent(element: Element = document.body, event: object) {
+function fireKeyDownEvent(
+  element: Element = document.body,
+  event: Record<string, unknown>
+) {
   fireEvent.keyDown(element, event);
 }
 

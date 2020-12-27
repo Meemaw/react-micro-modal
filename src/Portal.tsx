@@ -1,30 +1,24 @@
 import React, { useEffect, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 
-export interface PortalBaseProps {
-  parentSelector?: () => HTMLElement;
-  id?: string;
-}
+import { PORTAL_CLASS_NAME } from './styles';
 
-interface Props extends PortalBaseProps {
+export type ModalPortalProps = {
   children: React.ReactNode;
-}
+  parent?: () => HTMLElement;
+};
 
-// eslint-disable-next-line import/no-mutable-exports
-export let portalIndex = 1;
+const createPortalRoot = () => {
+  const root = document.createElement('div');
+  root.className = PORTAL_CLASS_NAME;
+  return root;
+};
 
-function portalNode(id?: string): HTMLDivElement {
-  const el = document.createElement('div');
-  // eslint-disable-next-line no-plusplus
-  el.className = id ? `${id}-portal` : `micro-modal-portal-${portalIndex++}`;
-  return el;
-}
+export const ModalPortal = ({ parent, children }: ModalPortalProps) => {
+  const node = useMemo(() => createPortalRoot(), []);
 
-const ModalPortal: React.FC<Props> = ({ id, parentSelector, children }) => {
-  const node = useMemo(() => portalNode(id), [id]);
-
-  const getParent = (): HTMLElement => {
-    return parentSelector ? parentSelector() : document.body;
+  const getParent = () => {
+    return parent?.() ?? document.body;
   };
 
   useEffect(() => {
@@ -34,7 +28,5 @@ const ModalPortal: React.FC<Props> = ({ id, parentSelector, children }) => {
     };
   }, []);
 
-  return ReactDOM.createPortal(children, node);
+  return createPortal(children, node);
 };
-
-export default ModalPortal;

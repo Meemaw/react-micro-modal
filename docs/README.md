@@ -30,7 +30,7 @@ import MicroModal from 'react-micro-modal';
   /*
     Function that recieves a handleOpen function and should render a modal trigger. (REQUIRED if used as a uncontrolled component)
   */
-  trigger={handleOpen => <div onClick={handleOpen}>Open!</div>}
+  trigger={(handleOpen) => <div onClick={handleOpen}>Open!</div>}
   /*
     Boolean describing if the modal should be open on first render. (if used as a uncontrolled component, else just use open)
   */
@@ -38,11 +38,7 @@ import MicroModal from 'react-micro-modal';
   /*
     Function that recieves a handleClose function and should render the modal content.
   */
-  children={handleClose => <button onClick={handleClose}>Close!</button>}
-  /*
-    String identifying the micro-modal element
-  */
-  id="my-micro-modal"
+  children={(handleClose) => <button onClick={handleClose}>Close!</button>}
   /*
     Boolean indicating whether to close modal on escape keypress
   */
@@ -60,20 +56,21 @@ import MicroModal from 'react-micro-modal';
   */
   closeOnAnimationEnd={false}
   /*
-    String className to be applied to the modal element
+    Overrides props for base elements. Accepting any props a native 'div' elements accepts
   */
-  modalClassName="custom-modal-class"
-  /*
-    String className to be applied to the modal overlay element
-  */
-  modalOverlayClassName="custom-modal-class"
-  /*
-    CSSProperties to be applied to the modal overlay element
-  */
-  modalOverlayStyles={{ background: 'red' }}
-  /*
-    CSSProperties to be applied to the modal container element
-  */
-  containerStyles={{ background: 'red' }}
+  overrides={{
+    Root: {
+      className: 'root-class-name',
+      style: { zIndex: 150 },
+    },
+    Overlay: {
+      className: 'overlay-class-name',
+      style: { zIndex: 150 },
+    },
+    Dialog: {
+      className: 'dialog-class-name',
+      style: { zIndex: 150 },
+    },
+  }}
 />;
 ```
