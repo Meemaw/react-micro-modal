@@ -40,8 +40,6 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "storybook": "start-storybook",
-    "storybook:build": "build-storybook -o .out",
-    "storybook:deploy": "storybook-to-ghpages --existing-output-dir=.out",
     "lint": "concurrently \"npm run prettier\" \"npm run eslint\"",
     "eslint": "eslint --max-warnings 0 --ext .ts 'src/**/*'",
     "prettier": "prettier --config .prettierrc -l 'src/**/*.{ts,tsx}*' '__tests__/**/*.{ts,tsx}*' || (echo \nThese files are not formatted correctly && false)",

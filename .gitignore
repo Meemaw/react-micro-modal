@@ -16,3 +16,6 @@ compiled
 # misc
 .nyc_output
 .DS_Store
+
+# Storybook
+storybook-static
