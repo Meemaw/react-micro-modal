@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react"
+  },
+  "exclude": ["src/__tests__", "src/stories", "dist", "rollup"]
+}
