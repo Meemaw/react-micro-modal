@@ -8,7 +8,7 @@ const config: Config.InitialOptions = {
   transform: {
     '.ts': 'ts-jest',
   },
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/test/'],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
     '\\.(css|less|scss)$': 'identity-obj-proxy',
