@@ -15,7 +15,7 @@ _Accessible, lightweight and configurable modal component with a11y-enabled insp
 
 ## Features
 
-- Micro bundle - 2.37 KB 📦
+- Micro bundle - 1.9 KB 📦
 - a11y friendly 👓
 - Supports nested modals
 - Focuses on the first focusable element within the modal
