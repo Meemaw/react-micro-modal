@@ -43,9 +43,7 @@ jobs:
           yarn storybook:deploy
       - name: Release package
         if: github.ref == 'refs/heads/master'
-        run: |
-          yarn build
-          npx semantic-release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
