@@ -12,7 +12,7 @@ const FOCUSABLE_SELETORS = [
   '[tabindex]:not([tabindex^="-"])',
 ] as const;
 
-export const getFocusableNodes = (element: HTMLElement): HTMLElement[] => {
+export const getFocusableNodes = (element: HTMLElement) => {
   return Object.values(
     element.querySelectorAll<HTMLElement>(
       (FOCUSABLE_SELETORS as unknown) as string
@@ -20,9 +20,7 @@ export const getFocusableNodes = (element: HTMLElement): HTMLElement[] => {
   );
 };
 
-export const focusFirstNode = (
-  element: HTMLElement
-): HTMLElement | undefined => {
+export const focusFirstNode = (element: HTMLElement) => {
   const focusableNodes = getFocusableNodes(element);
   let focusedElement: HTMLElement | undefined;
   if (focusableNodes.length) {
@@ -32,10 +30,7 @@ export const focusFirstNode = (
   return focusedElement;
 };
 
-export const handleTabPress = (
-  element: HTMLElement,
-  event: KeyboardEvent
-): HTMLElement | undefined => {
+export const handleTabPress = (element: HTMLElement, event: KeyboardEvent) => {
   const focusableNodes = getFocusableNodes(element);
   if (!focusableNodes.length) {
     return undefined;
