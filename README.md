@@ -28,21 +28,20 @@ _Accessible, lightweight and configurable modal component with a11y-enabled insp
 
 Here is a minimal uncontrolled modal example in 3 lines of code.
 
-```javascript
+```tsx
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import MicroModal from 'react-micro-modal';
 
 const App = () => {
   return (
-    <MicroModal
-      trigger={(handleOpen) => <div onClick={handleOpen}>Open!</div>}
-      children={(handleClose) => <button onClick={handleClose}>Close!</button>}
-    />
+    <MicroModal trigger={(open) => <div onClick={open}>Open!</div>}>
+      {(close) => <button onClick={close}>Close!</button>}
+    </MicroModal>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById('root'));
 ```
 
 ## Live Playground

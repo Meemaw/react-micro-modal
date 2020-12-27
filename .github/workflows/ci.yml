@@ -38,11 +38,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Deploy Storybook
-        if: github.ref == 'refs/heads/master'
-        run: |
-          yarn storybook:build
-          yarn storybook:deploy
       - name: Release package
         if: github.ref == 'refs/heads/master'
         run: npx semantic-release
