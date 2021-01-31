@@ -18,6 +18,21 @@
         "eslint-plugin-react-hooks",
         "eslint-plugin-testing-library"
       ]
+    },
+    {
+      "groupName": "monorepo:rollup",
+      "packageNames": [
+        "@rollup/plugin-commonjs",
+        "@rollup/plugin-json",
+        "@rollup/plugin-node-resolve",
+        "@rollup/plugin-replace",
+        "@types/rollup-plugin-peer-deps-external",
+        "rollup",
+        "rollup-plugin-peer-deps-external",
+        "rollup-plugin-sourcemaps",
+        "rollup-plugin-terser",
+        "rollup-plugin-typescript2"
+      ]
     }
   ]
 }
